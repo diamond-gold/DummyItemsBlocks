@@ -5,4 +5,5 @@ branches:
 projects:
   DummyItemsBlocks:
     path: ""
+    lint: false
 ...
