@@ -133,7 +133,7 @@ class Main extends PluginBase
         $this->getServer()->getAsyncPool()->addWorkerStartHook(function (int $worker) use ($blocks, $items): void {
             $this->getServer()->getAsyncPool()->submitTaskToWorker(new class(serialize($blocks), serialize($items)) extends AsyncTask {
 
-                public function __construct(private readonly string $blocksSerialized, private readonly string $itemsSerialized)
+                public function __construct(private string $blocksSerialized, private string $itemsSerialized)
                 {
 
                 }
