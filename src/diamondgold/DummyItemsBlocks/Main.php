@@ -67,6 +67,7 @@ class Main extends PluginBase
                 if (StringToItemParser::getInstance()->parse($id)) {
                     $this->getLogger()->warning("Item $id is in StringToItemParser!");
                     unset($items[$k]);
+                    continue;
                 }
                 if (GlobalItemDataHandlers::getDeserializer()->deserializeType(new SavedItemData($id))) {
                     $this->getLogger()->warning("Item $id is already registered!");
@@ -97,24 +98,26 @@ class Main extends PluginBase
                 TypeConverter::getInstance()->coreItemStackToNet($item);
             } catch (AssumptionFailedError) {
                 // Unmapped blockstate returned by blockstate serializer
+                $alias = StringToItemParser::getInstance()->lookupAliases($item)[0];
                 if ($item instanceof ItemBlock) {
-                    $this->getLogger()->warning("Block {$item->getName()} is not supported");
-                    $key = array_search($item->getName(), $blocks, true);
+                    $this->getLogger()->warning("Block $alias is not supported");
+                    $key = array_search($alias, $blocks, true);
                     unset($blocks[$key]);
                 } else {
-                    $this->getLogger()->warning("Item {$item->getName()} is not supported");
-                    $key = array_search($item->getName(), $items, true);
+                    $this->getLogger()->warning("Item $alias is not supported");
+                    $key = array_search($alias, $items, true);
                     unset($items[$key]);
                 }
                 $changed = true;
             } catch (Throwable $e) {
+                $alias = StringToItemParser::getInstance()->lookupAliases($item)[0];
                 if ($item instanceof ItemBlock) {
-                    $this->getLogger()->warning("Block {$item->getName()} is not supported: " . $e->getMessage());
-                    $key = array_search($item->getName(), $blocks, true);
+                    $this->getLogger()->warning("Block $alias is not supported: " . $e->getMessage());
+                    $key = array_search($alias, $blocks, true);
                     unset($blocks[$key]);
                 } else {
-                    $this->getLogger()->warning("Item {$item->getName()} is not supported " . $e->getMessage());
-                    $key = array_search($item->getName(), $items, true);
+                    $this->getLogger()->warning("Item $alias is not supported: " . $e->getMessage());
+                    $key = array_search($alias, $items, true);
                     unset($items[$key]);
                 }
                 $changed = true;
