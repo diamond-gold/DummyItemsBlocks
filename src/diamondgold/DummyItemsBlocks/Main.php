@@ -2,6 +2,7 @@
 
 namespace diamondgold\DummyItemsBlocks;
 
+use Closure;
 use InvalidArgumentException;
 use pocketmine\block\Block;
 use pocketmine\block\BlockBreakInfo;
@@ -13,12 +14,19 @@ use pocketmine\block\RuntimeBlockStateRegistry;
 use pocketmine\data\bedrock\block\BlockStateData;
 use pocketmine\data\bedrock\block\BlockStateDeserializeException;
 use pocketmine\data\bedrock\block\convert\UnsupportedBlockStateException;
+use pocketmine\data\bedrock\item\ItemSerializerDeserializerRegistrar;
+use pocketmine\data\bedrock\item\ItemTypeDeserializeException;
+use pocketmine\data\bedrock\item\ItemTypeNames;
 use pocketmine\data\bedrock\item\SavedItemData;
+use pocketmine\data\bedrock\PotionTypeIdMap;
 use pocketmine\inventory\CreativeInventory;
+use pocketmine\item\enchantment\EnchantmentInstance;
+use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
 use pocketmine\item\ItemBlock;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\ItemTypeIds;
+use pocketmine\item\SplashPotion;
 use pocketmine\item\StringToItemParser;
 use pocketmine\network\mcpe\convert\TypeConverter;
 use pocketmine\plugin\DisablePluginException;
@@ -88,6 +96,8 @@ class Main extends PluginBase
             $config->save();
         }
 
+        self::registerSpecialItems($items);
+
         self::registerBlocks($blocks);
         self::registerItems($items);
 
@@ -132,7 +142,25 @@ class Main extends PluginBase
             $this->getLogger()->emergency("Server restart required to remove unsupported items");
             throw new DisablePluginException();
         }
+        /*
+        // reload creative inventory from json file
+        // pro: no need to add items manually
+        // con: likely incompatible with other plugins that add to creative inventory
 
+        CreativeInventory::getInstance()->clear();
+        $creativeItems = CraftingManagerFromDataHelper::loadJsonArrayOfObjectsFile(
+            BedrockDataFiles::CREATIVEITEMS_JSON,
+            ItemStackData::class
+        );
+        foreach ($creativeItems as $data) {
+            $item = CraftingManagerFromDataHelper::deserializeItemStack($data);
+            if ($item === null) {
+                $this->getLogger()->debug("Creative item $data->name");
+                continue;
+            }
+            CreativeInventory::getInstance()->add($item);
+        }
+        */
         $this->getServer()->getAsyncPool()->addWorkerStartHook(function (int $worker) use ($blocks, $items): void {
             $this->getServer()->getAsyncPool()->submitTaskToWorker(new class(serialize($blocks), serialize($items)) extends AsyncTask {
 
@@ -143,8 +171,10 @@ class Main extends PluginBase
 
                 public function onRun(): void
                 {
+                    $items = unserialize($this->itemsSerialized);
+                    Main::registerSpecialItems($items);
                     Main::registerBlocks(unserialize($this->blocksSerialized));
-                    Main::registerItems(unserialize($this->itemsSerialized));
+                    Main::registerItems($items);
                 }
             }, $worker);
         });
@@ -183,6 +213,25 @@ class Main extends PluginBase
         }
     }
 
+    public static function registerSpecialItems(array &$items): void
+    {
+        if (in_array(ItemTypeNames::LINGERING_POTION, $items, true)) {
+            $key = array_search(ItemTypeNames::LINGERING_POTION, $items, true);
+            unset($items[$key]);
+            $item = new SplashPotion(new ItemIdentifier(ItemTypeIds::newId()), self::generateNameFromId(ItemTypeNames::LINGERING_POTION));
+            self::map1to1ItemWithMeta(
+                ItemTypeNames::LINGERING_POTION,
+                $item,
+                function (SplashPotion $item, int $meta): void {
+                    $item->setType(PotionTypeIdMap::getInstance()->fromId($meta) ?? throw new ItemTypeDeserializeException("Unknown potion type ID $meta"));
+                },
+                fn(SplashPotion $item) => PotionTypeIdMap::getInstance()->toId($item->getType())
+            );
+            StringToItemParser::getInstance()->register(ItemTypeNames::LINGERING_POTION, fn() => clone $item);
+            //Already added to creative inventory automagically
+        }
+    }
+
     /**
      * @param string[] $stringToItemParserNames
      */
@@ -215,6 +264,34 @@ class Main extends PluginBase
                 return;
             }
         }
-        CreativeInventory::getInstance()->add($item);
+        if ($id === ItemTypeNames::ENCHANTED_BOOK) { // has to be added here else weird duplicates appear in creative inventory, client issue?
+            foreach (VanillaEnchantments::getAll() as $enchantment) {
+                for ($i = 1; $i <= $enchantment->getMaxLevel(); $i++) {
+                    CreativeInventory::getInstance()->add((clone $item)->addEnchantment(new EnchantmentInstance($enchantment, $i)));
+                }
+            }
+        } else {
+            CreativeInventory::getInstance()->add($item);
+        }
+    }
+
+    /**
+     * @link ItemSerializerDeserializerRegistrar::map1to1ItemWithMeta()
+     * @phpstan-template TBlock of Block
+     * @phpstan-param TBlock $block
+     * @phpstan-param Closure(TBlock, int) : void $deserializeMeta
+     * @phpstan-param Closure(TBlock) : int $serializeMeta
+     */
+    private static function map1to1ItemWithMeta(string $id, Item $item, Closure $deserializeMeta, Closure $serializeMeta): void
+    {
+        GlobalItemDataHandlers::getDeserializer()->map($id, function (SavedItemData $data) use ($item, $deserializeMeta): Item {
+            $result = clone $item;
+            $deserializeMeta($result, $data->getMeta());
+            return $result;
+        });
+        GlobalItemDataHandlers::getSerializer()->map($item, function (Item $item) use ($id, $serializeMeta): SavedItemData {
+            $meta = $serializeMeta($item);
+            return new SavedItemData($id, $meta);
+        });
     }
 }
