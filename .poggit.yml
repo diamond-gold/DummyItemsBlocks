@@ -5,6 +5,4 @@ branches:
 projects:
   DummyItemsBlocks:
     path: ""
-    lint:
-      phpstan: false
 ...
