@@ -93,11 +93,11 @@ class Main extends PluginBase
         if ($config->hasChanged()) {
             $config->save();
         }
-
-        self::registerSpecialItems($items);
+        $itemsWithoutSpecial = $items;
+        self::registerSpecialItems($itemsWithoutSpecial);
 
         self::registerBlocks($blocks);
-        self::registerItems($items);
+        self::registerItems($itemsWithoutSpecial);
 
         // Server will crash if it tries to send these items to the client
         // These ItemBlocks require block state data when registering
