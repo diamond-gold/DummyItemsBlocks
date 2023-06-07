@@ -55,10 +55,9 @@ class Main extends PluginBase
                 unset($blocks[$k]);
             }
             try {
-                if (GlobalBlockStateHandlers::getDeserializer()->deserializeBlock(BlockStateData::current($id, []))) {
-                    $this->getLogger()->warning("Block $id is already registered!");
-                    unset($blocks[$k]);
-                }
+                GlobalBlockStateHandlers::getDeserializer()->deserializeBlock(BlockStateData::current($id, []));
+                $this->getLogger()->warning("Block $id is already registered!");
+                unset($blocks[$k]);
             } catch (UnsupportedBlockStateException) {
                 // not registered
             } catch (BlockStateDeserializeException $e) {
@@ -77,10 +76,9 @@ class Main extends PluginBase
                     unset($items[$k]);
                     continue;
                 }
-                if (GlobalItemDataHandlers::getDeserializer()->deserializeType(new SavedItemData($id))) {
-                    $this->getLogger()->warning("Item $id is already registered!");
-                    unset($items[$k]);
-                }
+                GlobalItemDataHandlers::getDeserializer()->deserializeType(new SavedItemData($id));
+                $this->getLogger()->warning("Item $id is already registered!");
+                unset($items[$k]);
             } catch (Throwable) {
             }
         }
@@ -101,7 +99,8 @@ class Main extends PluginBase
         self::registerBlocks($blocks);
         self::registerItems($items);
 
-        // Server will crash if it tries to send these items to the client, blame PMMP
+        // Server will crash if it tries to send these items to the client
+        // These ItemBlocks require block state data when registering
         $changed = false;
         foreach (CreativeInventory::getInstance()->getAll() as $item) {
             try {
@@ -113,10 +112,12 @@ class Main extends PluginBase
                     $this->getLogger()->warning("Block $alias is not supported");
                     $key = array_search($alias, $blocks, true);
                     unset($blocks[$key]);
+                    //file_put_contents("unsupportedBlock.txt", "- $alias\n", FILE_APPEND);
                 } else {
                     $this->getLogger()->warning("Item $alias is not supported");
                     $key = array_search($alias, $items, true);
                     unset($items[$key]);
+                    //file_put_contents("unsupportedItem.txt", "- $alias\n", FILE_APPEND);
                 }
                 $changed = true;
             } catch (Throwable $e) {
@@ -125,10 +126,12 @@ class Main extends PluginBase
                     $this->getLogger()->warning("Block $alias is not supported: " . $e->getMessage());
                     $key = array_search($alias, $blocks, true);
                     unset($blocks[$key]);
+                    //file_put_contents("unsupportedBlock.txt", "- $alias\n", FILE_APPEND);
                 } else {
                     $this->getLogger()->warning("Item $alias is not supported: " . $e->getMessage());
                     $key = array_search($alias, $items, true);
                     unset($items[$key]);
+                    //file_put_contents("unsupportedItem.txt", "- $alias\n", FILE_APPEND);
                 }
                 $changed = true;
             }
@@ -277,10 +280,10 @@ class Main extends PluginBase
 
     /**
      * @link ItemSerializerDeserializerRegistrar::map1to1ItemWithMeta()
-     * @phpstan-template TBlock of Block
-     * @phpstan-param TBlock $block
-     * @phpstan-param Closure(TBlock, int) : void $deserializeMeta
-     * @phpstan-param Closure(TBlock) : int $serializeMeta
+     * @phpstan-template TItem of Item
+     * @phpstan-param TItem                       $item
+     * @phpstan-param \Closure(TItem, int) : void $deserializeMeta
+     * @phpstan-param \Closure(TItem) : int       $serializeMeta
      */
     private static function map1to1ItemWithMeta(string $id, Item $item, Closure $deserializeMeta, Closure $serializeMeta): void
     {
