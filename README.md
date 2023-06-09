@@ -7,6 +7,8 @@
 > * Except for lingering potions which are functional as normal splash potions.
 > 
 > Allows worlds with such items or blocks to be loaded
+> 
+> Freedom to control items and blocks added via `config.yml`
 
 [![](https://poggit.pmmp.io/ci.shield/diamond-gold/DummyItemsBlocks/DummyItemsBlocks?style=for-the-badge)](https://poggit.pmmp.io/ci/diamond-gold/DummyItemsBlocks/~)
 
@@ -34,3 +36,13 @@ Feeling generous? Buy me some [snacks](https://ko-fi.com/diamondgold)! (❤´艸
 > If you encounter similar error in another plugin, please delete `minecraft:shield` in `config.yml`
 > 
 > Replace `minecraft:shield` with what you see in the error message
+ 
+# Screenshots
+> Left: Vanilla PocketMine-MP
+> 
+> Right: With plugin
+
+<a href="https://ibb.co/CJ1zsNp"><img src="https://i.ibb.co/0BDcV8p/Construction-Compare.png" alt="Construction-Compare" border="0" /></a>
+<a href="https://ibb.co/09h65S9"><img src="https://i.ibb.co/bvzCtZv/Equipment-Compare.png" alt="Equipment-Compare" border="0"></a>
+<a href="https://ibb.co/1n08q5p"><img src="https://i.ibb.co/mBR6qwY/Items-Compare.png" alt="Items-Compare" border="0"></a>
+<a href="https://ibb.co/Xj5mckj"><img src="https://i.ibb.co/bQvpcRQ/Nature-Compare.png" alt="Nature-Compare" border="0"></a>
