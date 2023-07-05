@@ -1,11 +1,11 @@
-![DummyItemsBlocks](https://socialify.git.ci/diamond-gold/DummyItemsBlocks/image?description=1&font=Inter&forks=1&issues=1&name=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Light)
-
-## ⚠️ Experimental - backup your worlds and player data! ⚠️
+![DummyItemsBlocks](https://socialify.git.ci/diamond-gold/DummyItemsBlocks/image?description=1&font=Inter&forks=1&issues=1&logo=https%3A%2F%2Fgithub.com%2Fdiamond-gold%2FDummyItemsBlocks%2Fraw%2Fmain%2Ficon.gif&name=1&owner=1&pattern=Circuit%20Board&pulls=1&stargazers=1&theme=Light)
 
 > Items and blocks added are not functional, they are just for decoration purposes.
 > 
 > * Except for lingering potions which are functional as normal splash potions.
-> 
+>
+> Supports all items and blocks up to Minecraft 1.20
+>
 > Allows worlds with such items or blocks to be loaded
 > 
 > Freedom to control items and blocks added via `config.yml`
@@ -28,21 +28,43 @@ Feeling generous? Buy me some [snacks](https://ko-fi.com/diamondgold)! (❤´艸
 [![Feature Requests](https://img.shields.io/github/issues-raw/diamond-gold/DummyItemsBlocks/Feature%20Request?label=Feature%20Requests&logo=github&style=for-the-badge)](https://github.com/diamond-gold/DummyItemsBlocks/issues)
 [![Bug Reports](https://img.shields.io/github/issues-raw/diamond-gold/DummyItemsBlocks/bug?label=Bug%20Reports&logo=github&style=for-the-badge)](https://github.com/diamond-gold/DummyItemsBlocks/issues)
 
-# Known issue when another plugin that add vanilla items is present
+# Known issue when another plugin that add vanilla items or blocks is installed
 `
 [Server thread/CRITICAL]: InvalidArgumentException: "Deserializer is already assigned for "minecraft:shield"" (EXCEPTION) in "pmsrc/src/data/bedrock/item/ItemDeserializer" at line 55
 `
 
 > If you encounter similar error in another plugin, please delete `minecraft:shield` in `config.yml`
 > 
-> Replace `minecraft:shield` with what you see in the error message
- 
-# Screenshots
-> Left: Vanilla PocketMine-MP
-> 
-> Right: With plugin
+> Replace `minecraft:shield` with the item or block specified in the error message.
 
-<a href="https://ibb.co/CJ1zsNp"><img src="https://i.ibb.co/0BDcV8p/Construction-Compare.png" alt="Construction-Compare" border="0" /></a>
-<a href="https://ibb.co/09h65S9"><img src="https://i.ibb.co/bvzCtZv/Equipment-Compare.png" alt="Equipment-Compare" border="0"></a>
-<a href="https://ibb.co/1n08q5p"><img src="https://i.ibb.co/mBR6qwY/Items-Compare.png" alt="Items-Compare" border="0"></a>
-<a href="https://ibb.co/Xj5mckj"><img src="https://i.ibb.co/bQvpcRQ/Nature-Compare.png" alt="Nature-Compare" border="0"></a>
+# Special behavior
+
+By default, the following is required to change block states by right-clicking
+- Player is in creative mode
+- Have `dummyitemsblocks.changestate` permission, default: op
+- Holding an arrow named `Change State` in either main hand or offhand
+
+Can be obtained by: ```/give player arrow 1 {display:{Name:"Change State"}}```
+
+Customizable using the Main::setCanChangeStatesClosure() method
+
+### Examples of block state changes by right-clicking:
+|       Block        |  Sneak-right-click  |    Right-click     |
+|:------------------:|:-------------------:|:------------------:|
+|  (Soul) Campfire   |     Toggle fire     |     Place item     |
+| Chiseled Bookshelf |          -          | Toggle book slots  |
+|   Decorated Pot    | Place sherd pattern |         -          |
+|    Pitcher Crop    | Toggle upper state  |  Increase growth   |
+|  (Sticky) Piston   |          -          |  Toggle extended   |
+|     Turtle Egg     |   Increase cracks   | Increase egg Count |
+There are many other blocks that can change state by right-clicking.
+
+# Acknowledgements
+Referenced from various PRs on the PocketMine-MP repo
+
+Contains code adapted from
+- #5232 Goat Horn
+- #5455 Firework Star/Rocket
+- #5827 Chiseled Bookshelf
+
+Icon created from images taken from: https://modrinth.com/resourcepack/vanillaxbr
