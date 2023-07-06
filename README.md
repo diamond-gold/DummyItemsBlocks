@@ -49,14 +49,15 @@ Can be obtained by: ```/give player arrow 1 {display:{Name:"Change State"}}```
 Customizable using the Main::setCanChangeStatesClosure() method
 
 ### Examples of block state changes by right-clicking:
-|       Block        |  Sneak-right-click  |    Right-click     |
-|:------------------:|:-------------------:|:------------------:|
-|  (Soul) Campfire   |     Toggle fire     |     Place item     |
-| Chiseled Bookshelf |          -          | Toggle book slots  |
-|   Decorated Pot    | Place sherd pattern |         -          |
-|    Pitcher Crop    | Toggle upper state  |  Increase growth   |
-|  (Sticky) Piston   |          -          |  Toggle extended   |
-|     Turtle Egg     |   Increase cracks   | Increase egg Count |
+|       Block        | Sneak-right-click  |     Right-click     |
+|:------------------:|:------------------:|:-------------------:|
+|  (Soul) Campfire   |    Toggle fire     |     Place item      |
+| Chiseled Bookshelf |         -          |  Toggle book slots  |
+|   Decorated Pot    |         -          | Place sherd pattern |
+|    Pitcher Crop    | Toggle upper state |   Increase growth   |
+|  (Sticky) Piston   |         -          |   Toggle extended   |
+|     Turtle Egg     |  Increase cracks   | Increase egg Count  |
+
 There are many other blocks that can change state by right-clicking.
 
 # Acknowledgements
