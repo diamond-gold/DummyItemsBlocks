@@ -68,4 +68,4 @@ Contains code adapted from
 - #5455 Firework Star/Rocket
 - #5827 Chiseled Bookshelf
 
-Icon created from images taken from: https://modrinth.com/resourcepack/vanillaxbr
+Icon created using textures from: https://modrinth.com/resourcepack/vanillaxbr
