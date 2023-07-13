@@ -16,6 +16,7 @@ use diamondgold\DummyItemsBlocks\block\Dispenser;
 use diamondgold\DummyItemsBlocks\block\enum\BigDripleafTilt;
 use diamondgold\DummyItemsBlocks\block\enum\CrackedState;
 use diamondgold\DummyItemsBlocks\block\enum\DripstoneThickness;
+use diamondgold\DummyItemsBlocks\block\enum\FacingDirection;
 use diamondgold\DummyItemsBlocks\block\enum\SeaGrassType;
 use diamondgold\DummyItemsBlocks\block\enum\StructureBlockType;
 use diamondgold\DummyItemsBlocks\block\enum\StructureVoidType;
@@ -47,7 +48,6 @@ use diamondgold\DummyItemsBlocks\block\TurtleEgg;
 use diamondgold\DummyItemsBlocks\block\type\AnyFacingTransparent;
 use diamondgold\DummyItemsBlocks\block\type\MultiFaceDirection;
 use diamondgold\DummyItemsBlocks\tile\DummyTile;
-use InvalidArgumentException;
 use pocketmine\block\Block;
 use pocketmine\block\BlockBreakInfo;
 use pocketmine\block\BlockIdentifier;
@@ -330,7 +330,7 @@ final class BlockStateRegistration
                     BlockStateStringValues::BIG_DRIPLEAF_TILT_PARTIAL_TILT => BigDripleafTilt::PARTIAL_TILT(),
                     BlockStateStringValues::BIG_DRIPLEAF_TILT_FULL_TILT => BigDripleafTilt::FULL_TILT(),
                     BlockStateStringValues::BIG_DRIPLEAF_TILT_UNSTABLE => BigDripleafTilt::UNSTABLE(),
-                    default => throw new InvalidArgumentException("Unknown BigDripleafTilt: " . $reader->readString(BlockStateNames::BIG_DRIPLEAF_TILT))
+                    default => throw $reader->badValueException(BlockStateNames::BIG_DRIPLEAF_TILT, $reader->readString(BlockStateNames::BIG_DRIPLEAF_TILT))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
@@ -714,7 +714,7 @@ final class BlockStateRegistration
                     BlockStateStringValues::DRIPSTONE_THICKNESS_MERGE => DripstoneThickness::MERGE(),
                     BlockStateStringValues::DRIPSTONE_THICKNESS_MIDDLE => DripstoneThickness::MIDDLE(),
                     BlockStateStringValues::DRIPSTONE_THICKNESS_TIP => DripstoneThickness::TIP(),
-                    default => throw new InvalidArgumentException("Unknown DripstoneThickness: " . $reader->readString(BlockStateNames::DRIPSTONE_THICKNESS))
+                    default => throw $reader->badValueException(BlockStateNames::DRIPSTONE_THICKNESS, $reader->readString(BlockStateNames::DRIPSTONE_THICKNESS))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
@@ -820,7 +820,7 @@ final class BlockStateRegistration
                     BlockStateStringValues::SEA_GRASS_TYPE_DEFAULT => SeaGrassType::DEFAULT(),
                     BlockStateStringValues::SEA_GRASS_TYPE_DOUBLE_TOP => SeaGrassType::DOUBLE_TOP(),
                     BlockStateStringValues::SEA_GRASS_TYPE_DOUBLE_BOT => SeaGrassType::DOUBLE_BOT(),
-                    default => throw new InvalidArgumentException("Unknown sea grass type: " . $reader->readString(BlockStateNames::SEA_GRASS_TYPE))
+                    default => throw $reader->badValueException(BlockStateNames::SEA_GRASS_TYPE, $reader->readString(BlockStateNames::SEA_GRASS_TYPE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
@@ -841,7 +841,7 @@ final class BlockStateRegistration
                     BlockStateStringValues::CRACKED_STATE_NO_CRACKS => CrackedState::NO_CRACKS(),
                     BlockStateStringValues::CRACKED_STATE_CRACKED => CrackedState::CRACKED(),
                     BlockStateStringValues::CRACKED_STATE_MAX_CRACKED => CrackedState::MAX_CRACKED(),
-                    default => throw new InvalidArgumentException("Unknown cracked state: " . $reader->readString(BlockStateNames::CRACKED_STATE))
+                    default => throw $reader->badValueException(BlockStateNames::CRACKED_STATE, $reader->readString(BlockStateNames::CRACKED_STATE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
@@ -884,7 +884,7 @@ final class BlockStateRegistration
                     BlockStateStringValues::STRUCTURE_BLOCK_TYPE_DATA => StructureBlockType::DATA(),
                     BlockStateStringValues::STRUCTURE_BLOCK_TYPE_EXPORT => StructureBlockType::EXPORT(),
                     BlockStateStringValues::STRUCTURE_BLOCK_TYPE_INVALID => StructureBlockType::INVALID(),
-                    default => throw new InvalidArgumentException("Unknown structure block type: " . $reader->readString(BlockStateNames::STRUCTURE_BLOCK_TYPE))
+                    default => throw $reader->badValueException(BlockStateNames::STRUCTURE_BLOCK_TYPE, $reader->readString(BlockStateNames::STRUCTURE_BLOCK_TYPE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
@@ -904,7 +904,7 @@ final class BlockStateRegistration
                 ->setType(match ($reader->readString(BlockStateNames::STRUCTURE_VOID_TYPE)) {
                     BlockStateStringValues::STRUCTURE_VOID_TYPE_VOID => StructureVoidType::VOID(),
                     BlockStateStringValues::STRUCTURE_VOID_TYPE_AIR => StructureVoidType::AIR(),
-                    default => throw new InvalidArgumentException("Unknown structure void type: " . $reader->readString(BlockStateNames::STRUCTURE_VOID_TYPE))
+                    default => throw $reader->badValueException(BlockStateNames::STRUCTURE_VOID_TYPE, $reader->readString(BlockStateNames::STRUCTURE_VOID_TYPE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
@@ -965,13 +965,13 @@ final class BlockStateRegistration
                     BlockStateStringValues::TURTLE_EGG_COUNT_TWO_EGG => TurtleEggCount::TWO_EGG(),
                     BlockStateStringValues::TURTLE_EGG_COUNT_THREE_EGG => TurtleEggCount::THREE_EGG(),
                     BlockStateStringValues::TURTLE_EGG_COUNT_FOUR_EGG => TurtleEggCount::FOUR_EGG(),
-                    default => throw new InvalidArgumentException("Unknown turtle egg count: " . $reader->readString(BlockStateNames::TURTLE_EGG_COUNT))
+                    default => throw $reader->badValueException(BlockStateNames::TURTLE_EGG_COUNT, $reader->readString(BlockStateNames::TURTLE_EGG_COUNT))
                 })
                 ->setCrackedState(match ($reader->readString(BlockStateNames::CRACKED_STATE)) {
                     BlockStateStringValues::CRACKED_STATE_NO_CRACKS => CrackedState::NO_CRACKS(),
                     BlockStateStringValues::CRACKED_STATE_CRACKED => CrackedState::CRACKED(),
                     BlockStateStringValues::CRACKED_STATE_MAX_CRACKED => CrackedState::MAX_CRACKED(),
-                    default => throw new InvalidArgumentException("Unknown cracked state: " . $reader->readString(BlockStateNames::CRACKED_STATE))
+                    default => throw $reader->badValueException(BlockStateNames::CRACKED_STATE, $reader->readString(BlockStateNames::CRACKED_STATE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
