@@ -8,7 +8,10 @@ use pocketmine\data\runtime\InvalidSerializedRuntimeDataException;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 use pocketmine\utils\AssumptionFailedError;
 
-/* @internal */
+/**
+ * Needed until fixed https://github.com/pmmp/PocketMine-MP/issues/5877
+ * @internal
+ */
 final class HackStringProperty
 {
     /** @var LeverFacing[] $realToFakeMap */
