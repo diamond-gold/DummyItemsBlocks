@@ -256,6 +256,7 @@ final class Main extends PluginBase
         $changed = false;
         /** @var string $alias */
         foreach (StringToItemParser::getInstance()->getKnownAliases() as $alias) {
+            $alias = "minecraft:$alias";
             $item = StringToItemParser::getInstance()->parse($alias);
             assert($item instanceof Item);
             try {
@@ -268,13 +269,18 @@ final class Main extends PluginBase
                     Utils::removeIfPresent(str_replace('_block', '', $alias), $blocks);
                     //file_put_contents("unsupportedBlock.txt", "- $alias\n", FILE_APPEND);
                     /*
+                    $this->getLogger()->debug("Expected:");
                     foreach (TypeConverter::getInstance()->getBlockTranslator()->getBlockStateDictionary()->getStates() as $state) {
                         if ($state->getStateName() === $alias || $state->getStateName() === str_replace('_block', '', $alias)) {
                             foreach (BlockStateDictionaryEntry::decodeStateProperties($state->getRawStateProperties()) as $name => $tag) {
-                                $this->getLogger()->debug("$name " . get_class($tag) . " {$tag->getValue()}");
+                                $this->getLogger()->debug("$name " . $tag->toString());
                             }
                             break;
                         }
+                    }
+                    $this->getLogger()->debug("Got:");
+                    foreach (GlobalBlockStateHandlers::getSerializer()->serializeBlock($item->getBlock())->getStates() as $name => $tag) {
+                        $this->getLogger()->debug("$name " . $tag->toString());
                     }
                     */
                 } else {
