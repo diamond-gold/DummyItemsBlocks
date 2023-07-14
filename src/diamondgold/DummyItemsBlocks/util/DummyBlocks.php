@@ -19,8 +19,6 @@ use pocketmine\utils\CloningRegistryTrait;
  * @internal
  * @method static FloorSign BAMBOO_STANDING_SIGN()
  * @method static WallSign BAMBOO_WALL_SIGN()
- * @method static FloorSign CHERRY_STANDING_SIGN()
- * @method static WallSign CHERRY_WALL_SIGN()
  */
 final class DummyBlocks
 {
@@ -55,28 +53,6 @@ final class DummyBlocks
                 new BlockTypeInfo(BlockBreakInfo::instant()),
                 $fakeWoodType,
                 fn() => DummyItems::BAMBOO_SIGN()
-            )
-        );
-
-        $id = BlockTypeNames::CHERRY_STANDING_SIGN;
-        self::_registryRegister(
-            $clean($id),
-            new FloorSign(
-                new BlockIdentifier(BlockTypeIds::newId(), Sign::class),
-                Utils::generateNameFromId($id),
-                new BlockTypeInfo(BlockBreakInfo::instant()),
-                $fakeWoodType,
-                fn() => DummyItems::CHERRY_SIGN()
-            )
-        );
-        $id = BlockTypeNames::CHERRY_WALL_SIGN;
-        self::_registryRegister(
-            $clean($id),
-            new WallSign(new BlockIdentifier(BlockTypeIds::newId(), Sign::class),
-                Utils::generateNameFromId($id),
-                new BlockTypeInfo(BlockBreakInfo::instant()),
-                $fakeWoodType,
-                fn() => DummyItems::CHERRY_SIGN()
             )
         );
     }

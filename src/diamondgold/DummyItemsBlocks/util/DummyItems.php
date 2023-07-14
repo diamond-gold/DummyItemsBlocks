@@ -12,7 +12,6 @@ use pocketmine\utils\CloningRegistryTrait;
  * DO NOT USE THIS CLASS, ITEM MAY NOT BE REGISTERED
  * @internal
  * @method static ItemBlockWallOrFloor BAMBOO_SIGN()
- * @method static ItemBlockWallOrFloor CHERRY_SIGN()
  */
 final class DummyItems
 {
@@ -25,6 +24,5 @@ final class DummyItems
     protected static function setup(): void
     {
         self::_registryRegister("bamboo_sign", new ItemBlockWallOrFloor(new ItemIdentifier(ItemTypeIds::newId()), DummyBlocks::BAMBOO_STANDING_SIGN(), DummyBlocks::BAMBOO_WALL_SIGN()));
-        self::_registryRegister("cherry_sign", new ItemBlockWallOrFloor(new ItemIdentifier(ItemTypeIds::newId()), DummyBlocks::CHERRY_STANDING_SIGN(), DummyBlocks::CHERRY_WALL_SIGN()));
     }
 }

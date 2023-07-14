@@ -40,36 +40,6 @@ final class ReflectionHelper
         if (!isset($known)) {
             try {
                 $known = array_values((new ReflectionClass(ItemTypeNames::class))->getConstants());
-                // remove these when updating to 5.2
-                foreach (self::BlockTypeNames() as $name) {
-                    if (str_contains($name, '_hanging_sign') && !in_array($name, $known, true)) {
-                        $known[] = $name;
-                    }
-                }
-                foreach ($known as $key => $name) {
-                    if (str_contains($name, 'pottery_shard')) {
-                        $known[$key] = str_replace('pottery_shard', 'pottery_sherd', $name);
-                    }
-                }
-                foreach ([
-                             "minecraft:cherry_boat",
-                             "minecraft:cherry_chest_boat",
-                             "minecraft:cherry_sign",
-                             "minecraft:bamboo_sign",
-                         ] as $name) {
-                    if (!in_array($name, $known, true)) {
-                        $known[] = $name;
-                    }
-                }
-                foreach ([BlockTypeNames::BAMBOO_DOOR, BlockTypeNames::CHERRY_DOOR] as $name) {
-                    if (!in_array($name, $known, true)) {
-                        $known[] = $name;
-                    }
-                }
-                $key = array_search("minecraft:debug_stick", $known, true);
-                if ($key !== false) {
-                    unset($known[$key]);
-                }
             } catch (Throwable $e) {
                 throw new AssumptionFailedError("ItemTypeNames reflection failed", 0, $e);
             }

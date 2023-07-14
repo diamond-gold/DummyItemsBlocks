@@ -58,12 +58,6 @@ class Campfire extends Transparent
             $this->position->getWorld()->setBlock($this->position, $this->setExtinguished(!$this->extinguished));
             return true;
         } elseif ($face === Facing::UP) {
-            // remove when require > 5.1.2 https://github.com/pmmp/PocketMine-MP/commit/8dedbb747108c45b7534b8ac6f05e8464ee8eb22
-            $clickVector = new Vector3(
-                min(1.0, max(0.0, $clickVector->x)),
-                min(1.0, max(0.0, $clickVector->y)),
-                min(1.0, max(0.0, $clickVector->z))
-            );
             // currently only correct when block facing is north, HELP WANTED
             if ($this->facing !== Facing::NORTH) {
                 $player?->sendTip("I am aware that the slot is incorrect. HELP WANTED. Place it while facing south for now.");

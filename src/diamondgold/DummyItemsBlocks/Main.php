@@ -25,7 +25,6 @@ use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Opaque;
 use pocketmine\block\RuntimeBlockStateRegistry;
 use pocketmine\block\tile\TileFactory;
-use pocketmine\block\utils\LeavesType;
 use pocketmine\block\utils\WoodType;
 use pocketmine\crafting\CraftingManagerFromDataHelper;
 use pocketmine\crafting\json\ItemStackData;
@@ -203,23 +202,20 @@ final class Main extends PluginBase
             }
         }
         // Sign: Item must be registered if block is registered, if not remove block
-        foreach ([
-                     ItemTypeNames::BAMBOO_SIGN => [BlockTypeNames::BAMBOO_STANDING_SIGN, BlockTypeNames::BAMBOO_WALL_SIGN],
-                     "minecraft:cherry_sign" => [BlockTypeNames::CHERRY_STANDING_SIGN, BlockTypeNames::CHERRY_WALL_SIGN], // 5.2
-                 ] as $itemName => $blockNames) {
-            $blockFound = false;
-            foreach ($blockNames as $blockName) {
-                if (in_array($blockName, $blocks)) {
-                    $blockFound = true;
-                    break;
-                }
+        $itemName = ItemTypeNames::BAMBOO_SIGN;
+        $blockNames = [BlockTypeNames::BAMBOO_STANDING_SIGN, BlockTypeNames::BAMBOO_WALL_SIGN];
+        $blockFound = false;
+        foreach ($blockNames as $blockName) {
+            if (in_array($blockName, $blocks)) {
+                $blockFound = true;
+                break;
             }
-            if ($blockFound) {
-                if (!in_array($itemName, $items, true)) {
-                    foreach ($blockNames as $blockName) {
-                        if (Utils::removeIfPresent($blockName, $blocks)) {
-                            $this->getLogger()->warning("Removed Block $blockName as Item $itemName is not registered");
-                        }
+        }
+        if ($blockFound) {
+            if (!in_array($itemName, $items, true)) {
+                foreach ($blockNames as $blockName) {
+                    if (Utils::removeIfPresent($blockName, $blocks)) {
+                        $this->getLogger()->warning("Removed Block $blockName as Item $itemName is not registered");
                     }
                 }
             }
@@ -403,18 +399,14 @@ final class Main extends PluginBase
             }
         }
         // MULTI_FACE_DIRECTION_BITS 0-63
-        foreach ([BlockTypeNames::SCULK_VEIN, BlockTypeNames::GLOW_LICHEN] as $id) { // GLOW_LICHEN added in 5.2
-            if (Utils::removeIfPresent($id, $blocks)) {
-                BlockStateRegistration::multiFaceDirection($id);
-            }
+        $id = BlockTypeNames::SCULK_VEIN;
+        if (Utils::removeIfPresent($id, $blocks)) {
+            BlockStateRegistration::multiFaceDirection($id);
         }
         // PILLAR_AXIS
         foreach ([
                      BlockTypeNames::BAMBOO_BLOCK,
                      BlockTypeNames::STRIPPED_BAMBOO_BLOCK,
-                     BlockTypeNames::CHERRY_LOG, // added in 5.2
-                     BlockTypeNames::STRIPPED_CHERRY_LOG, // added in 5.2
-                     BlockTypeNames::STRIPPED_CHERRY_WOOD, // added in 5.2
                      BlockTypeNames::INFESTED_DEEPSLATE,
                  ] as $id) {
             if (Utils::removeIfPresent($id, $blocks)) {
@@ -467,25 +459,21 @@ final class Main extends PluginBase
                 BlockStateRegistration::Campfire($id);
             }
         }
-        // cherry stuff except sapling added in 5.2, expect bamboo stuff to be added soon too
-        foreach ([BlockTypeNames::BAMBOO_BUTTON, BlockTypeNames::CHERRY_BUTTON] as $id) {
-            if (Utils::removeIfPresent($id, $blocks)) {
-                BlockStateRegistration::button($id); // registered as stone button so that WoodType is not required
-            }
+        // Bamboo stuff obsolete when merged: https://github.com/pmmp/PocketMine-MP/pull/5875
+        $id = BlockTypeNames::BAMBOO_BUTTON;
+        if (Utils::removeIfPresent($id, $blocks)) {
+            BlockStateRegistration::button($id); // registered as stone button so that WoodType is not required
         }
-        foreach ([BlockTypeNames::BAMBOO_DOOR, BlockTypeNames::CHERRY_DOOR] as $id) {
-            if (Utils::removeIfPresent($id, $blocks)) {
-                BlockStateRegistration::door($id);
-            }
+        $id = BlockTypeNames::BAMBOO_DOOR;
+        if (Utils::removeIfPresent($id, $blocks)) {
+            BlockStateRegistration::door($id);
         }
-        foreach ([BlockTypeNames::BAMBOO_FENCE_GATE, BlockTypeNames::CHERRY_FENCE_GATE] as $id) {
-            if (Utils::removeIfPresent($id, $blocks)) {
-                BlockStateRegistration::fenceGate($id, WoodType::OAK()); // will probably be obsolete when WoodType exists, it doesn't matter now since it's only for runtime
-            }
+        $id = BlockTypeNames::BAMBOO_FENCE_GATE;
+        if (Utils::removeIfPresent($id, $blocks)) {
+            BlockStateRegistration::fenceGate($id, WoodType::OAK()); // will probably be obsolete when WoodType exists, it doesn't matter now since it's only for runtime
         }
         // can't register separately, either both or none
         foreach ([
-                     BlockTypeNames::CHERRY_SLAB => BlockTypeNames::CHERRY_DOUBLE_SLAB,
                      BlockTypeNames::BAMBOO_SLAB => BlockTypeNames::BAMBOO_DOUBLE_SLAB,
                      BlockTypeNames::BAMBOO_MOSAIC_SLAB => BlockTypeNames::BAMBOO_MOSAIC_DOUBLE_SLAB,
                  ] as $singleId => $doubleId) {
@@ -499,33 +487,18 @@ final class Main extends PluginBase
         if (Utils::removeIfPresent($standingId, $blocks) && Utils::removeIfPresent($wallId, $blocks)) {
             BlockStateRegistration::sign($standingId, $wallId, DummyBlocks::BAMBOO_STANDING_SIGN(), DummyBlocks::BAMBOO_WALL_SIGN());
         }
-        // can't register separately, either both or none
-        $standingId = BlockTypeNames::CHERRY_STANDING_SIGN;
-        $wallId = BlockTypeNames::CHERRY_WALL_SIGN;
-        if (Utils::removeIfPresent($standingId, $blocks) && Utils::removeIfPresent($wallId, $blocks)) {
-            BlockStateRegistration::sign($standingId, $wallId, DummyBlocks::CHERRY_STANDING_SIGN(), DummyBlocks::CHERRY_WALL_SIGN());
-        }
-        foreach ([BlockTypeNames::BAMBOO_STAIRS, BlockTypeNames::BAMBOO_MOSAIC_STAIRS, BlockTypeNames::CHERRY_STAIRS] as $id) {
+        foreach ([BlockTypeNames::BAMBOO_STAIRS, BlockTypeNames::BAMBOO_MOSAIC_STAIRS] as $id) {
             if (Utils::removeIfPresent($id, $blocks)) {
                 BlockStateRegistration::stairs($id);
             }
         }
-        foreach ([BlockTypeNames::BAMBOO_TRAPDOOR, BlockTypeNames::CHERRY_TRAPDOOR] as $id) {
-            if (Utils::removeIfPresent($id, $blocks)) {
-                BlockStateRegistration::trapdoor($id);
-            }
-        }
-        foreach ([BlockTypeNames::BAMBOO_PRESSURE_PLATE, BlockTypeNames::CHERRY_PRESSURE_PLATE] as $id) {
-            if (Utils::removeIfPresent($id, $blocks)) {
-                BlockStateRegistration::simplePressurePlate($id); // registered as stone pressure plate so that WoodType is not required
-            }
-        }
-        $id = BlockTypeNames::CHERRY_LEAVES;
+        $id = BlockTypeNames::BAMBOO_TRAPDOOR;
         if (Utils::removeIfPresent($id, $blocks)) {
-            BlockStateRegistration::leaves($id, LeavesType::MANGROVE()); // will probably be obsolete when LeavesType exists, mangrove leaves currently don't drop sapling, don't want to drop the wrong sapling
+            BlockStateRegistration::trapdoor($id);
         }
-        if (Utils::removeIfPresent(BlockTypeNames::CHERRY_WOOD, $blocks)) {
-            BlockStateRegistration::CherryWood();
+        $id = BlockTypeNames::BAMBOO_PRESSURE_PLATE;
+        if (Utils::removeIfPresent($id, $blocks)) {
+            BlockStateRegistration::simplePressurePlate($id); // registered as stone pressure plate so that WoodType is not required
         }
 
         // cherry_sapling AGE_BIT T/F CANNOT use encodeSapling() no SAPLING_TYPE
@@ -709,20 +682,14 @@ final class Main extends PluginBase
             }
         };
         $registerSign(
-            "minecraft:bamboo_sign", // ItemTypeNames in 5.2
+            ItemTypeNames::BAMBOO_SIGN,
             [BlockTypeNames::BAMBOO_WALL_SIGN, BlockTypeNames::BAMBOO_STANDING_SIGN],
             DummyItems::BAMBOO_SIGN()
-        );
-        // obsolete in 5.2
-        $registerSign(
-            "minecraft:cherry_sign",
-            [BlockTypeNames::CHERRY_WALL_SIGN, BlockTypeNames::CHERRY_STANDING_SIGN],
-            DummyItems::CHERRY_SIGN()
         );
 
         foreach ([
                      BlockTypeNames::POWDER_SNOW => ItemTypeNames::POWDER_SNOW_BUCKET,
-                     BlockTypeNames::PITCHER_CROP => "minecraft:pitcher_pod", // ItemTypeNames in 5.2
+                     BlockTypeNames::PITCHER_CROP => ItemTypeNames::PITCHER_POD,
                      BlockTypeNames::TORCHFLOWER_CROP => ItemTypeNames::TORCHFLOWER_SEEDS,
                  ] as $blockId => $itemId) {
             if (in_array($itemId, $items, true) && in_array($blockId, $blocks, true)) { //should not remove if either one is not present (register as normal item)

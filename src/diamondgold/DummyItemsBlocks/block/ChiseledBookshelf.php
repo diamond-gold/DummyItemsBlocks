@@ -49,12 +49,6 @@ class ChiseledBookshelf extends Opaque
     public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
     {
         if (!Main::canChangeBlockStates($this, $player)) return false;
-        // remove when require > 5.1.2 https://github.com/pmmp/PocketMine-MP/commit/8dedbb747108c45b7534b8ac6f05e8464ee8eb22
-        $clickVector = new Vector3(
-            min(1.0, max(0.0, $clickVector->x)),
-            min(1.0, max(0.0, $clickVector->y)),
-            min(1.0, max(0.0, $clickVector->z))
-        );
         // adapted from https://github.com/pmmp/PocketMine-MP/pull/5827
         if ($face !== $this->facing) {
             return false;
