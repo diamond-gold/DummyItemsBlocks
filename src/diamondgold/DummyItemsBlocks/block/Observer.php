@@ -2,35 +2,34 @@
 
 namespace diamondgold\DummyItemsBlocks\block;
 
+use diamondgold\DummyItemsBlocks\block\enum\FacingDirection;
+use diamondgold\DummyItemsBlocks\block\hack\HackStringProperty;
+use diamondgold\DummyItemsBlocks\block\trait\FacingDirectionTrait;
 use diamondgold\DummyItemsBlocks\block\trait\PoweredTrait;
-use pocketmine\block\Block;
+use pocketmine\block\BlockIdentifier;
+use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Opaque;
-use pocketmine\block\utils\AnyFacingTrait;
 use pocketmine\data\runtime\RuntimeDataDescriber;
-use pocketmine\item\Item;
-use pocketmine\math\Facing;
-use pocketmine\math\Vector3;
-use pocketmine\player\Player;
-use pocketmine\world\BlockTransaction;
 
 class Observer extends Opaque
 {
-    use AnyFacingTrait {
-        AnyFacingTrait::describeBlockOnlyState as describeFacingState;
+    use FacingDirectionTrait {
+        FacingDirectionTrait::describeBlockOnlyState as describeFacingDirectionState;
     }
     use PoweredTrait {
         PoweredTrait::describeBlockOnlyState as describePoweredState;
     }
 
-    protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
+    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
     {
-        $this->describeFacingState($w);
-        $this->describePoweredState($w);
+        $this->facingDirection = FacingDirection::DOWN();
+        $this->facingDirectionHack = new HackStringProperty(FacingDirection::getAll());
+        parent::__construct($idInfo, $name, $typeInfo);
     }
 
-    public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null): bool
+    protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        $this->setFacing(Facing::opposite($face));
-        return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
+        $this->describeFacingDirectionState($w);
+        $this->describePoweredState($w);
     }
 }

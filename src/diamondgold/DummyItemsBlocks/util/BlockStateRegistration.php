@@ -622,12 +622,20 @@ final class BlockStateRegistration
 
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): Observer => (clone $block)
-                ->setFacing($reader->readFacingDirection())
+                ->setFacingDirection(match ($reader->readString(BlockStateNames::MC_FACING_DIRECTION)) {
+                    BlockStateStringValues::MC_FACING_DIRECTION_DOWN => FacingDirection::DOWN(),
+                    BlockStateStringValues::MC_FACING_DIRECTION_UP => FacingDirection::UP(),
+                    BlockStateStringValues::MC_FACING_DIRECTION_NORTH => FacingDirection::NORTH(),
+                    BlockStateStringValues::MC_FACING_DIRECTION_SOUTH => FacingDirection::SOUTH(),
+                    BlockStateStringValues::MC_FACING_DIRECTION_WEST => FacingDirection::WEST(),
+                    BlockStateStringValues::MC_FACING_DIRECTION_EAST => FacingDirection::EAST(),
+                    default => throw $reader->badValueException(BlockStateNames::MC_FACING_DIRECTION, $reader->readString(BlockStateNames::MC_FACING_DIRECTION)),
+                })
                 ->setPowered($reader->readBool(BlockStateNames::POWERED_BIT))
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(Observer $block) => Writer::create($id)
-                ->writeFacingDirection($block->getFacing())
+                ->writeString(BlockStateNames::MC_FACING_DIRECTION, $block->getFacingDirection()->name())
                 ->writeBool(BlockStateNames::POWERED_BIT, $block->isPowered())
         );
     }

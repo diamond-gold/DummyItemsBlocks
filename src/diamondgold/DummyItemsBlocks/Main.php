@@ -112,6 +112,7 @@ final class Main extends PluginBase
         // use hacky workaround for now, see HackStringProperty
         $incomplete = [ // enum/string type block states, can't read/write properly due to RuntimeDataDescriber not supporting string... ¯\(°_o)/¯
             //BlockTypeNames::BIG_DRIPLEAF, // default state NONE
+            //BlockTypeNames::OBSERVER, // default state DOWN
             //BlockTypeNames::POINTED_DRIPSTONE, // default state TIP
             //BlockTypeNames::SEAGRASS, // default state DEFAULT
             //BlockTypeNames::SNIFFER_EGG, // default state NO_CRACKS
