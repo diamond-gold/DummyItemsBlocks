@@ -314,7 +314,7 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5835
+    // obsolete in 5.4
     public static function BigDripleaf(): void
     {
         $id = BlockTypeNames::BIG_DRIPLEAF;
@@ -640,6 +640,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5940
     public static function PinkPetals(): void
     {
         $id = BlockTypeNames::PINK_PETALS;
@@ -858,7 +859,7 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5835
+    // obsolete in 5.4
     public static function SmallDripleafBlock(): void
     {
         $id = BlockTypeNames::SMALL_DRIPLEAF_BLOCK;
