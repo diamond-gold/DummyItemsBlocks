@@ -57,6 +57,7 @@ use pocketmine\plugin\DisablePluginException;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\utils\AssumptionFailedError;
+use pocketmine\utils\ConfigLoadException;
 use pocketmine\world\format\io\GlobalBlockStateHandlers;
 use pocketmine\world\format\io\GlobalItemDataHandlers;
 use Throwable;
@@ -127,7 +128,13 @@ final class Main extends PluginBase
         $incompleteWarned = false;
         */
         $blocks = $config->get("blocks", []);
+        if (!is_array($blocks)) {
+            throw new ConfigLoadException("Config 'blocks' must be string array");
+        }
         foreach ($blocks as $k => $id) {
+            if (!is_string($id)) {
+                throw new ConfigLoadException("Config 'blocks' at index $k must be a string, got " . gettype($id));
+            }
             if (in_array($id, $removedBlocks, true)) {
                 $this->getLogger()->warning("Block $id is intentionally removed!");
                 unset($blocks[$k]);
@@ -160,6 +167,9 @@ final class Main extends PluginBase
         }
         //$config->set("items", ReflectionHelper::ItemTypeNames());
         $items = $config->get("items", []);
+        if (!is_array($items)) {
+            throw new ConfigLoadException("Config 'items' must be string array");
+        }
         $removedItems = [
             ItemTypeNames::SPAWN_EGG,
             ItemTypeNames::CHEST_BOAT,
@@ -246,7 +256,7 @@ final class Main extends PluginBase
         self::registerSpecialItems($itemsWithoutSpecial);
         self::registerItems($itemsWithoutSpecial);
 
-        $this->registerDummyTiles();
+        $this->registerDummyTiles($blocks);
 
         // Server will crash if it tries to send these items to the client
         // These ItemBlocks require block state data when registering
@@ -342,7 +352,9 @@ final class Main extends PluginBase
 
                 public function onRun(): void
                 {
+                    /** @var string[] $items */
                     $items = igbinary_unserialize($this->itemsSerialized);
+                    /** @var string[] $blocks */
                     $blocks = igbinary_unserialize($this->blocksSerialized);
                     $blocksWithoutSpecial = $blocks;
                     Main::registerSpecialBlocks($blocksWithoutSpecial);
@@ -865,7 +877,11 @@ final class Main extends PluginBase
         });
     }
 
-    private function registerDummyTiles(): void
+    /**
+     * @param string[] $blocks
+     * @return void
+     */
+    private function registerDummyTiles(array $blocks): void
     {
         // Goal: preserve tile data, not the best way but good enough for decoration purpose
         // not going to write a separate tile for each block unless absolutely required :P
@@ -909,7 +925,6 @@ final class Main extends PluginBase
             TileNames::SCULK_CATALYST => [BlockTypeNames::SCULK_CATALYST],
             TileNames::STRUCTURE_BLOCK => [BlockTypeNames::STRUCTURE_BLOCK],
         ];
-        $blocks = $this->getConfig()->get('blocks', []);
         $registeredTiles = ReflectionHelper::TileFactoryRegisteredTileIds();
         foreach ($tiles as $name => $blockNames) {
             if (in_array($name, $registeredTiles, true)) {

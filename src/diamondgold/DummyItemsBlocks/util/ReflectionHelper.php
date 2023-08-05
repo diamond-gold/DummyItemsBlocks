@@ -23,8 +23,10 @@ final class ReflectionHelper
     {
         // don't cache this, it will change during runtime
         try {
+            $value = (new ReflectionClass(TileFactory::class))->getProperty("knownTiles")->getValue(TileFactory::getInstance());
+            assert(is_array($value));
             /** @var string[] $known */
-            $known = array_keys((new ReflectionClass(TileFactory::class))->getProperty("knownTiles")->getValue(TileFactory::getInstance()));
+            $known = array_keys($value);
         } catch (Throwable $e) {
             throw new AssumptionFailedError("TileFactory reflection failed", 0, $e);
         }
