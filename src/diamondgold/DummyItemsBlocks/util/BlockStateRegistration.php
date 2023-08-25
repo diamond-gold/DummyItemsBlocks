@@ -541,6 +541,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/6013
     public static function HangingSign(string $id): void
     {
         $block = new HangingSign(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
@@ -640,7 +641,7 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5940
+    // obsolete in 5.5
     public static function PinkPetals(): void
     {
         $id = BlockTypeNames::PINK_PETALS;

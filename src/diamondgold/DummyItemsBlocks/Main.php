@@ -700,7 +700,7 @@ final class Main extends PluginBase
         );
 
         foreach ([
-                     BlockTypeNames::POWDER_SNOW => ItemTypeNames::POWDER_SNOW_BUCKET,
+                     BlockTypeNames::POWDER_SNOW => ItemTypeNames::POWDER_SNOW_BUCKET, // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5964
                      BlockTypeNames::PITCHER_CROP => ItemTypeNames::PITCHER_POD,
                      BlockTypeNames::TORCHFLOWER_CROP => ItemTypeNames::TORCHFLOWER_SEEDS,
                  ] as $blockId => $itemId) {
