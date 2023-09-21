@@ -14,6 +14,7 @@ use diamondgold\DummyItemsBlocks\block\Composter;
 use diamondgold\DummyItemsBlocks\block\DecoratedPot;
 use diamondgold\DummyItemsBlocks\block\Dispenser;
 use diamondgold\DummyItemsBlocks\block\enum\BigDripleafTilt;
+use diamondgold\DummyItemsBlocks\block\enum\BlockFace;
 use diamondgold\DummyItemsBlocks\block\enum\CrackedState;
 use diamondgold\DummyItemsBlocks\block\enum\DripstoneThickness;
 use diamondgold\DummyItemsBlocks\block\enum\FacingDirection;
@@ -45,6 +46,7 @@ use diamondgold\DummyItemsBlocks\block\StructureVoid;
 use diamondgold\DummyItemsBlocks\block\SuspiciousFallable;
 use diamondgold\DummyItemsBlocks\block\TorchflowerCrop;
 use diamondgold\DummyItemsBlocks\block\TurtleEgg;
+use diamondgold\DummyItemsBlocks\block\type\AmethystAnyFacing;
 use diamondgold\DummyItemsBlocks\block\type\AnyFacingTransparent;
 use diamondgold\DummyItemsBlocks\block\type\MultiFaceDirection;
 use diamondgold\DummyItemsBlocks\tile\DummyTile;
@@ -297,6 +299,29 @@ final class BlockStateRegistration
         );
     }
 
+    public static function AmethystAnyFacing(string $id): void
+    {
+        $block = new AmethystAnyFacing(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
+        self::register($block, [$id]);
+
+        GlobalBlockStateHandlers::getDeserializer()->map($id,
+            fn(Reader $reader): AmethystAnyFacing => (clone $block)
+                ->setBlockFace(match ($reader->readString(BlockStateNames::MC_BLOCK_FACE)) {
+                    BlockStateStringValues::MC_BLOCK_FACE_DOWN => BlockFace::DOWN(),
+                    BlockStateStringValues::MC_BLOCK_FACE_UP => BlockFace::UP(),
+                    BlockStateStringValues::MC_BLOCK_FACE_NORTH => BlockFace::NORTH(),
+                    BlockStateStringValues::MC_BLOCK_FACE_SOUTH => BlockFace::SOUTH(),
+                    BlockStateStringValues::MC_BLOCK_FACE_WEST => BlockFace::WEST(),
+                    BlockStateStringValues::MC_BLOCK_FACE_EAST => BlockFace::EAST(),
+                    default => throw $reader->badValueException(BlockStateNames::MC_BLOCK_FACE, $reader->readString(BlockStateNames::MC_BLOCK_FACE))
+                })
+        );
+        GlobalBlockStateHandlers::getSerializer()->map($block,
+            fn(AmethystAnyFacing $block) => Writer::create($id)
+                ->writeString(BlockStateNames::MC_BLOCK_FACE, $block->getBlockFace()->name())
+        );
+    }
+
     public static function BeeHive(string $id): void
     {
         $block = new BeeHive(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
@@ -365,12 +390,12 @@ final class BlockStateRegistration
 
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): CalibratedSculkSensor => (clone $block)
-                ->setFacing($reader->readLegacyHorizontalFacing())
+                ->setFacing($reader->readCardinalHorizontalFacing())
                 ->setPhase($reader->readBoundedInt(BlockStateNames::SCULK_SENSOR_PHASE, 0, 2))
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(CalibratedSculkSensor $block) => Writer::create($id)
-                ->writeLegacyHorizontalFacing($block->getFacing())
+                ->writeCardinalHorizontalFacing($block->getFacing())
                 ->writeInt(BlockStateNames::SCULK_SENSOR_PHASE, $block->getPhase())
         );
     }
@@ -384,12 +409,12 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): Campfire => (clone $block)
                 ->setExtinguished($reader->readBool(BlockStateNames::EXTINGUISHED))
-                ->setFacing($reader->readLegacyHorizontalFacing())
+                ->setFacing($reader->readCardinalHorizontalFacing())
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(Campfire $block) => Writer::create($id)
                 ->writeBool(BlockStateNames::EXTINGUISHED, $block->isExtinguished())
-                ->writeLegacyHorizontalFacing($block->getFacing())
+                ->writeCardinalHorizontalFacing($block->getFacing())
         );
     }
 

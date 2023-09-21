@@ -403,6 +403,12 @@ final class Main extends PluginBase
                      BlockTypeNames::MEDIUM_AMETHYST_BUD,
                      BlockTypeNames::LARGE_AMETHYST_BUD,
                      BlockTypeNames::AMETHYST_CLUSTER,
+                 ] as $id) {
+            if (Utils::removeIfPresent($id, $blocks)) {
+                BlockStateRegistration::AmethystAnyFacing($id);
+            }
+        }
+        foreach ([
                      BlockTypeNames::PISTON_ARM_COLLISION,
                      BlockTypeNames::STICKY_PISTON_ARM_COLLISION,
                  ] as $id) {
