@@ -40,8 +40,6 @@ use pocketmine\data\bedrock\item\ItemTypeNames;
 use pocketmine\data\bedrock\item\SavedItemData;
 use pocketmine\data\bedrock\PotionTypeIdMap;
 use pocketmine\inventory\CreativeInventory;
-use pocketmine\item\enchantment\EnchantmentInstance;
-use pocketmine\item\enchantment\VanillaEnchantments;
 use pocketmine\item\Item;
 use pocketmine\item\ItemBlock;
 use pocketmine\item\ItemBlockWallOrFloor;
@@ -108,25 +106,6 @@ final class Main extends PluginBase
             BlockTypeNames::CLIENT_REQUEST_PLACEHOLDER_BLOCK,
             //BlockTypeNames::MOVING_BLOCK, // should I remove or not? Does not seem to be useful since it is not interact-able and invisible
         ];
-        /*
-        // use hacky workaround for now, see HackStringProperty
-        $incomplete = [ // enum/string type block states, can't read/write properly due to RuntimeDataDescriber not supporting string... ¯\(°_o)/¯
-            //BlockTypeNames::BIG_DRIPLEAF, // default state NONE
-            //BlockTypeNames::OBSERVER, // default state DOWN
-            //BlockTypeNames::POINTED_DRIPSTONE, // default state TIP
-            //BlockTypeNames::SEAGRASS, // default state DEFAULT
-            //BlockTypeNames::SNIFFER_EGG, // default state NO_CRACKS
-            //BlockTypeNames::STRUCTURE_BLOCK, // default state DATA
-            //BlockTypeNames::STRUCTURE_VOID, // default state VOID
-            //BlockTypeNames::TURTLE_EGG, // default state NO_CRACKS, ONE_EGG
-        ];
-        $incompleteConfigName = "IUnderstandTheRiskAndWishToAddIncompleteBlockStates";
-        $loadIncompleteBlocks = $config->get($incompleteConfigName);
-        if ($loadIncompleteBlocks) {
-            $this->getLogger()->notice("$incompleteConfigName is set, MAKE SURE YOU HAVE A BACKUP!");
-        }
-        $incompleteWarned = false;
-        */
         $blocks = $config->get("blocks", []);
         if (!is_array($blocks)) {
             throw new ConfigLoadException("Config 'blocks' must be string array");
@@ -139,20 +118,6 @@ final class Main extends PluginBase
                 $this->getLogger()->warning("Block $id is intentionally removed!");
                 unset($blocks[$k]);
             }
-            /*
-            if (in_array($id, $incomplete, true) && !$loadIncompleteBlocks) {
-                if (!$incompleteWarned) {
-                    $incompleteWarned = true;
-                    $this->getLogger()->notice("If you insist on adding incomplete blocks, add '$incompleteConfigName: true' in config.yml");
-                    $this->getLogger()->notice("You will need to add the blocks again in config.yml after adding the line above");
-                    $this->getLogger()->notice("Be warned that certain block states of those blocks cannot be loaded (pmmp limitation)");
-                    $this->getLogger()->notice("They will always appear in and saved as the default state");
-                    $this->getLogger()->notice("This could lead to data loss! Ensure you have a backup!");
-                }
-                $this->getLogger()->warning("Block $id is incomplete and has been removed!");
-                unset($blocks[$k]);
-            }
-            */
             try {
                 GlobalBlockStateHandlers::getDeserializer()->deserializeBlock(BlockStateData::current($id, []));
                 $this->getLogger()->warning("Block $id is already registered!");
@@ -455,10 +420,6 @@ final class Main extends PluginBase
                 BlockStateRegistration::BeeHive($id);
             }
         }
-        // big_dripleaf BIG_DRIPLEAF_HEAD T/F BIG_DRIPLEAF_TILT string DIRECTION
-        if (Utils::removeIfPresent(BlockTypeNames::BIG_DRIPLEAF, $blocks)) {
-            BlockStateRegistration::BigDripleaf();
-        }
         $id = BlockTypeNames::BORDER_BLOCK;
         if (Utils::removeIfPresent($id, $blocks)) {
             BlockStateRegistration::wall($id);
@@ -567,10 +528,6 @@ final class Main extends PluginBase
         if (Utils::removeIfPresent(BlockTypeNames::OBSERVER, $blocks)) {
             BlockStateRegistration::Observer();
         }
-        // pink_petals DIRECTION GROWTH
-        if (Utils::removeIfPresent(BlockTypeNames::PINK_PETALS, $blocks)) {
-            BlockStateRegistration::PinkPetals();
-        }
         // piston sticky_piston FACING_DIRECTION
         foreach ([BlockTypeNames::PISTON, BlockTypeNames::STICKY_PISTON] as $id) {
             if (Utils::removeIfPresent($id, $blocks)) {
@@ -616,10 +573,6 @@ final class Main extends PluginBase
         // sniffer_egg CRACKED_STATE string
         if (Utils::removeIfPresent(BlockTypeNames::SNIFFER_EGG, $blocks)) {
             BlockStateRegistration::SnifferEgg();
-        }
-        // small_dripleaf_block DIRECTION UPPER_BLOCK_BIT T/F
-        if (Utils::removeIfPresent(BlockTypeNames::SMALL_DRIPLEAF_BLOCK, $blocks)) {
-            BlockStateRegistration::SmallDripleafBlock();
         }
         // structure_block STRUCTURE_BLOCK_TYPE string
         if (Utils::removeIfPresent(BlockTypeNames::STRUCTURE_BLOCK, $blocks)) {
@@ -851,15 +804,7 @@ final class Main extends PluginBase
             }
         }
         if ($addToCreative) {
-            if ($id === ItemTypeNames::ENCHANTED_BOOK) { // has to be added here else weird duplicates appear in creative inventory, client issue?
-                foreach (VanillaEnchantments::getAll() as $enchantment) {
-                    for ($i = 1; $i <= $enchantment->getMaxLevel(); $i++) {
-                        CreativeInventory::getInstance()->add((clone $item)->addEnchantment(new EnchantmentInstance($enchantment, $i)));
-                    }
-                }
-            } else {
-                CreativeInventory::getInstance()->add($item);
-            }
+            CreativeInventory::getInstance()->add($item);
         }
     }
 

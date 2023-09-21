@@ -24,7 +24,6 @@ blocks:
 - minecraft:bamboo_wall_sign
 - minecraft:bee_nest
 - minecraft:beehive
-- minecraft:big_dripleaf
 - minecraft:birch_hanging_sign
 - minecraft:border_block
 - minecraft:bubble_column
@@ -70,7 +69,6 @@ blocks:
 - minecraft:nether_sprouts
 - minecraft:oak_hanging_sign
 - minecraft:observer
-- minecraft:pink_petals
 - minecraft:piston
 - minecraft:piston_arm_collision
 - minecraft:pitcher_crop
@@ -86,7 +84,6 @@ blocks:
 - minecraft:sculk_vein
 - minecraft:seagrass
 - minecraft:small_amethyst_bud
-- minecraft:small_dripleaf_block
 - minecraft:sniffer_egg
 - minecraft:soul_campfire
 - minecraft:spruce_hanging_sign
@@ -164,7 +161,6 @@ items:
 - minecraft:elder_guardian_spawn_egg
 - minecraft:elytra
 - minecraft:empty_map
-- minecraft:enchanted_book
 - minecraft:end_crystal
 - minecraft:ender_dragon_spawn_egg
 - minecraft:ender_eye

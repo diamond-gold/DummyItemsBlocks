@@ -339,33 +339,6 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete in 5.4
-    public static function BigDripleaf(): void
-    {
-        $id = BlockTypeNames::BIG_DRIPLEAF;
-        $block = new BigDripleaf(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id]);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): BigDripleaf => (clone $block)
-                ->setFacing($reader->readLegacyHorizontalFacing())
-                ->setHead($reader->readBool(BlockStateNames::BIG_DRIPLEAF_HEAD))
-                ->setTilt(match ($reader->readString(BlockStateNames::BIG_DRIPLEAF_TILT)) {
-                    BlockStateStringValues::BIG_DRIPLEAF_TILT_NONE => BigDripleafTilt::NONE(),
-                    BlockStateStringValues::BIG_DRIPLEAF_TILT_PARTIAL_TILT => BigDripleafTilt::PARTIAL_TILT(),
-                    BlockStateStringValues::BIG_DRIPLEAF_TILT_FULL_TILT => BigDripleafTilt::FULL_TILT(),
-                    BlockStateStringValues::BIG_DRIPLEAF_TILT_UNSTABLE => BigDripleafTilt::UNSTABLE(),
-                    default => throw $reader->badValueException(BlockStateNames::BIG_DRIPLEAF_TILT, $reader->readString(BlockStateNames::BIG_DRIPLEAF_TILT))
-                })
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(BigDripleaf $block) => Writer::create($id)
-                ->writeLegacyHorizontalFacing($block->getFacing())
-                ->writeBool(BlockStateNames::BIG_DRIPLEAF_HEAD, $block->isHead())
-                ->writeString(BlockStateNames::BIG_DRIPLEAF_TILT, $block->getTilt()->name())
-        );
-    }
-
     public static function BubbleColumn(): void
     {
         $id = BlockTypeNames::BUBBLE_COLUMN;
@@ -431,34 +404,6 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(CherrySapling $block) => Writer::create($id)
                 ->writeBool(BlockStateNames::AGE_BIT, $block->isAgeBit())
-        );
-    }
-
-    // obsolete when 5.2
-    public static function CherryWood(): void
-    {
-        $id = BlockTypeNames::CHERRY_WOOD;
-        $block = new Wood(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()), WoodType::OAK());
-        self::register($block, [$id]);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            function (Reader $reader) use ($block) {
-                $reader->ignored(BlockStateNames::STRIPPED_BIT); //this is also ignored by vanilla
-                return BlockStateDeserializerHelper::decodeLog($block, false, $reader);
-            }
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            function (Wood $block): Writer {
-                //we can't use the standard method for this because cherry_wood has a useless property attached to it
-                if (!$block->isStripped()) {
-                    return Writer::create(BlockTypeNames::CHERRY_WOOD)
-                        ->writePillarAxis($block->getAxis())
-                        ->writeBool(BlockStateNames::STRIPPED_BIT, false); //this is useless, but it has to be written
-                } else {
-                    return Writer::create(BlockTypeNames::STRIPPED_CHERRY_WOOD)
-                        ->writePillarAxis($block->getAxis());
-                }
-            }
         );
     }
 
@@ -666,25 +611,6 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete in 5.5
-    public static function PinkPetals(): void
-    {
-        $id = BlockTypeNames::PINK_PETALS;
-        $block = new PinkPetals(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id]);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): PinkPetals => (clone $block)
-                ->setFacing($reader->readLegacyHorizontalFacing())
-                ->setGrowth($reader->readBoundedInt(BlockStateNames::GROWTH, 0, 7))
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(PinkPetals $block) => Writer::create($id)
-                ->writeLegacyHorizontalFacing($block->getFacing())
-                ->writeInt(BlockStateNames::GROWTH, $block->getGrowth())
-        );
-    }
-
     public static function Piston(string $id): void
     {
         $block = new Piston(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
@@ -882,25 +808,6 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(SnifferEgg $block) => Writer::create($id)
                 ->writeString(BlockStateNames::CRACKED_STATE, $block->getCrackedState()->name())
-        );
-    }
-
-    // obsolete in 5.4
-    public static function SmallDripleafBlock(): void
-    {
-        $id = BlockTypeNames::SMALL_DRIPLEAF_BLOCK;
-        $block = new SmallDripleafBlock(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id]);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): SmallDripleafBlock => (clone $block)
-                ->setFacing($reader->readLegacyHorizontalFacing())
-                ->setUpper($reader->readBool(BlockStateNames::UPPER_BLOCK_BIT))
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(SmallDripleafBlock $block) => Writer::create($id)
-                ->writeLegacyHorizontalFacing($block->getFacing())
-                ->writeBool(BlockStateNames::UPPER_BLOCK_BIT, $block->isUpper())
         );
     }
 
