@@ -1,7 +1,7 @@
 name: DummyItemsBlocks
 main: diamondgold\DummyItemsBlocks\Main
 description: Registers (non-functional) items and blocks
-version: 1.0.2
+version: 1.0.3
 api: 5.6.0
 load: STARTUP
 author: diamond-gold (ace)
