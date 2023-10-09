@@ -438,7 +438,6 @@ final class Main extends PluginBase
                 BlockStateRegistration::Campfire($id);
             }
         }
-        // Bamboo stuff obsolete when merged: https://github.com/pmmp/PocketMine-MP/pull/5875
         $id = BlockTypeNames::BAMBOO_BUTTON;
         if (Utils::removeIfPresent($id, $blocks)) {
             BlockStateRegistration::button($id); // registered as stone button so that WoodType is not required

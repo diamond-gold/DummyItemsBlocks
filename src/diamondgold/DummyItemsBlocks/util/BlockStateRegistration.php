@@ -295,6 +295,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete in 5.7
     public static function AmethystAnyFacing(string $id): void
     {
         $block = new AmethystAnyFacing(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
@@ -403,7 +404,7 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5827
+    // obsolete in 5.7
     public static function ChiseledBookshelf(): void
     {
         $id = BlockTypeNames::CHISELED_BOOKSHELF;
@@ -622,6 +623,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete in 5.7
     public static function PitcherCrop(): void
     {
         $id = BlockTypeNames::PITCHER_CROP;
@@ -640,6 +642,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete in 5.7
     public static function PitcherPlant(): void
     {
         $id = BlockTypeNames::PITCHER_PLANT;
@@ -807,6 +810,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/6045
     public static function StructureBlock(): void
     {
         $id = BlockTypeNames::STRUCTURE_BLOCK;
@@ -831,6 +835,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/6045
     public static function StructureVoid(): void
     {
         $id = BlockTypeNames::STRUCTURE_VOID;
@@ -874,6 +879,7 @@ final class BlockStateRegistration
         );
     }
 
+    // obsolete in 5.7
     public static function TorchflowerCrop(): void
     {
         $id = BlockTypeNames::TORCHFLOWER_CROP;
