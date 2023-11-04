@@ -2,33 +2,15 @@
 
 namespace diamondgold\DummyItemsBlocks\item\horn;
 
-use pocketmine\utils\EnumTrait;
-
-/**
- * @method static GoatHornType PONDER()
- * @method static GoatHornType SING()
- * @method static GoatHornType SEEK()
- * @method static GoatHornType FEEL()
- * @method static GoatHornType ADMIRE()
- * @method static GoatHornType CALL()
- * @method static GoatHornType YEARN()
- * @method static GoatHornType DREAM()
- */
-final class GoatHornType
+enum GoatHornType: int
 {
-    use EnumTrait;
-
-    protected static function setup(): void
-    {
-        self::registerAll(
-            new self("ponder"),
-            new self("sing"),
-            new self("seek"),
-            new self("feel"),
-            new self("admire"),
-            new self("call"),
-            new self("yearn"),
-            new self("dream")
-        );
-    }
+    // can't use constants cuz "Enum case value must be compile-time evaluate-able" nani?!
+    case PONDER = 0;
+    case SING = 1;
+    case SEEK = 2;
+    case FEEL = 3;
+    case ADMIRE = 4;
+    case CALL = 5;
+    case YEARN = 6;
+    case DREAM = 7;
 }

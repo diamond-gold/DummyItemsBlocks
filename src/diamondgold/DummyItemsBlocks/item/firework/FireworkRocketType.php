@@ -2,27 +2,11 @@
 
 namespace diamondgold\DummyItemsBlocks\item\firework;
 
-use pocketmine\utils\EnumTrait;
-
-/**
- * @method static FireworkRocketType SMALL_BALL()
- * @method static FireworkRocketType LARGE_BALL()
- * @method static FireworkRocketType STAR()
- * @method static FireworkRocketType CREEPER()
- * @method static FireworkRocketType BURST()
- */
-final class FireworkRocketType
+enum FireworkRocketType: int
 {
-    use EnumTrait;
-
-    protected static function setup(): void
-    {
-        self::registerAll(
-            new self("small_ball"),
-            new self("large_ball"),
-            new self("star"),
-            new self("creeper"),
-            new self("burst"),
-        );
-    }
+    case SMALL_BALL = 0;
+    case LARGE_BALL = 1;
+    case STAR = 2;
+    case CREEPER = 3;
+    case BURST = 4;
 }

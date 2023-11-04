@@ -3,7 +3,6 @@
 namespace diamondgold\DummyItemsBlocks\block;
 
 use diamondgold\DummyItemsBlocks\block\enum\StructureBlockType;
-use diamondgold\DummyItemsBlocks\block\hack\HackStringProperty;
 use diamondgold\DummyItemsBlocks\Main;
 use diamondgold\DummyItemsBlocks\tile\DummyTileTrait;
 use diamondgold\DummyItemsBlocks\tile\TileNames;
@@ -13,7 +12,6 @@ use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Opaque;
 use pocketmine\block\tile\Tile;
 use pocketmine\data\runtime\RuntimeDataDescriber;
-use pocketmine\data\runtime\RuntimeDataReader;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\ByteTag;
@@ -23,29 +21,22 @@ use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\LongTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\player\Player;
-use pocketmine\utils\AssumptionFailedError;
 
 class StructureBlock extends Opaque
 {
     use DummyTileTrait;
 
     protected StructureBlockType $type;
-    protected HackStringProperty $typeHack;
 
     public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
     {
-        $this->type = StructureBlockType::DATA();
-        $this->typeHack = new HackStringProperty(StructureBlockType::getAll());
+        $this->type = StructureBlockType::DATA;
         parent::__construct($idInfo, $name, $typeInfo);
     }
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        if ($w instanceof RuntimeDataReader) {
-            $this->typeHack->read($this->type, $w);
-        } else {
-            $this->typeHack->write($this->type, $w);
-        }
+        $w->enum($this->type);
     }
 
     public function getType(): StructureBlockType
@@ -63,15 +54,14 @@ class StructureBlock extends Opaque
     {
         if (!Main::canChangeBlockStates($this, $player)) return false;
         $this->position->getWorld()->setBlock($this->position, $this->setType(match ($this->getType()) {
-            StructureBlockType::DATA() => StructureBlockType::SAVE(),
-            StructureBlockType::SAVE() => StructureBlockType::LOAD(),
-            StructureBlockType::LOAD() => StructureBlockType::CORNER(),
-            StructureBlockType::CORNER() => StructureBlockType::INVALID(),
-            StructureBlockType::INVALID() => StructureBlockType::EXPORT(),
-            StructureBlockType::EXPORT() => StructureBlockType::DATA(),
-            default => throw new AssumptionFailedError("Invalid structure block type: " . $this->getType()->name())
+            StructureBlockType::DATA => StructureBlockType::SAVE,
+            StructureBlockType::SAVE => StructureBlockType::LOAD,
+            StructureBlockType::LOAD => StructureBlockType::CORNER,
+            StructureBlockType::CORNER => StructureBlockType::INVALID,
+            StructureBlockType::INVALID => StructureBlockType::EXPORT,
+            StructureBlockType::EXPORT => StructureBlockType::DATA,
         }));
-        $player?->sendTip("StructureBlockType: " . $this->getType()->name());
+        $player?->sendTip("StructureBlockType: " . $this->getType()->name);
         return true;
     }
 

@@ -4,7 +4,6 @@ namespace diamondgold\DummyItemsBlocks\block;
 
 use diamondgold\DummyItemsBlocks\block\enum\CrackedState;
 use diamondgold\DummyItemsBlocks\block\enum\TurtleEggCount;
-use diamondgold\DummyItemsBlocks\block\hack\HackStringProperty;
 use diamondgold\DummyItemsBlocks\block\trait\CrackedStateTrait;
 use diamondgold\DummyItemsBlocks\block\trait\NoneSupportTrait;
 use diamondgold\DummyItemsBlocks\Main;
@@ -12,11 +11,9 @@ use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Transparent;
 use pocketmine\data\runtime\RuntimeDataDescriber;
-use pocketmine\data\runtime\RuntimeDataReader;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
-use pocketmine\utils\AssumptionFailedError;
 
 class TurtleEgg extends Transparent
 {
@@ -26,25 +23,18 @@ class TurtleEgg extends Transparent
     use NoneSupportTrait;
 
     protected TurtleEggCount $eggCount;
-    protected HackStringProperty $eggCountHack;
 
     public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
     {
-        $this->crackedState = CrackedState::NO_CRACKS();
-        $this->eggCount = TurtleEggCount::ONE_EGG();
-        $this->crackedStateHack = new HackStringProperty(CrackedState::getAll());
-        $this->eggCountHack = new HackStringProperty(TurtleEggCount::getAll());
+        $this->crackedState = CrackedState::NO_CRACKS;
+        $this->eggCount = TurtleEggCount::ONE_EGG;
         parent::__construct($idInfo, $name, $typeInfo);
     }
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $this->describeCrackedState($w);
-        if ($w instanceof RuntimeDataReader) {
-            $this->eggCountHack->read($this->eggCount, $w);
-        } else {
-            $this->eggCountHack->write($this->eggCount, $w);
-        }
+        $w->enum($this->eggCount);
     }
 
     public function getEggCount(): TurtleEggCount
@@ -63,19 +53,17 @@ class TurtleEgg extends Transparent
         if (!Main::canChangeBlockStates($this, $player)) return false;
         if ($player?->isSneaking()) {
             $this->position->getWorld()->setBlock($this->position, $this->setCrackedState(match ($this->getCrackedState()) {
-                CrackedState::NO_CRACKS() => CrackedState::CRACKED(),
-                CrackedState::CRACKED() => CrackedState::MAX_CRACKED(),
-                CrackedState::MAX_CRACKED() => CrackedState::NO_CRACKS(),
-                default => throw new AssumptionFailedError("Invalid cracked state: " . $this->getCrackedState()->name())
+                CrackedState::NO_CRACKS => CrackedState::CRACKED,
+                CrackedState::CRACKED => CrackedState::MAX_CRACKED,
+                CrackedState::MAX_CRACKED => CrackedState::NO_CRACKS,
             }));
             return true;
         }
         $this->position->getWorld()->setBlock($this->position, $this->setEggCount(match ($this->getEggCount()) {
-            TurtleEggCount::ONE_EGG() => TurtleEggCount::TWO_EGG(),
-            TurtleEggCount::TWO_EGG() => TurtleEggCount::THREE_EGG(),
-            TurtleEggCount::THREE_EGG() => TurtleEggCount::FOUR_EGG(),
-            TurtleEggCount::FOUR_EGG() => TurtleEggCount::ONE_EGG(),
-            default => throw new AssumptionFailedError("Invalid egg count: " . $this->getEggCount()->name())
+            TurtleEggCount::ONE_EGG => TurtleEggCount::TWO_EGG,
+            TurtleEggCount::TWO_EGG => TurtleEggCount::THREE_EGG,
+            TurtleEggCount::THREE_EGG => TurtleEggCount::FOUR_EGG,
+            TurtleEggCount::FOUR_EGG => TurtleEggCount::ONE_EGG,
         }));
         return true;
     }

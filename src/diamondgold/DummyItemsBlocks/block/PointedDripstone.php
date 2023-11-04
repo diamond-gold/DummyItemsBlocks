@@ -3,7 +3,6 @@
 namespace diamondgold\DummyItemsBlocks\block;
 
 use diamondgold\DummyItemsBlocks\block\enum\DripstoneThickness;
-use diamondgold\DummyItemsBlocks\block\hack\HackStringProperty;
 use diamondgold\DummyItemsBlocks\block\trait\HangingTrait;
 use diamondgold\DummyItemsBlocks\block\trait\NoneSupportTrait;
 use diamondgold\DummyItemsBlocks\Main;
@@ -11,11 +10,9 @@ use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Transparent;
 use pocketmine\data\runtime\RuntimeDataDescriber;
-use pocketmine\data\runtime\RuntimeDataReader;
 use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
-use pocketmine\utils\AssumptionFailedError;
 
 class PointedDripstone extends Transparent
 {
@@ -25,23 +22,17 @@ class PointedDripstone extends Transparent
     use NoneSupportTrait;
 
     protected DripstoneThickness $thickness;
-    protected HackStringProperty $thicknessHack;
 
     public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
     {
-        $this->thickness = DripstoneThickness::TIP();
-        $this->thicknessHack = new HackStringProperty(DripstoneThickness::getAll());
+        $this->thickness = DripstoneThickness::TIP;
         parent::__construct($idInfo, $name, $typeInfo);
     }
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $this->describeHangingState($w);
-        if ($w instanceof RuntimeDataReader) {
-            $this->thicknessHack->read($this->thickness, $w);
-        } else {
-            $this->thicknessHack->write($this->thickness, $w);
-        }
+        $w->enum($this->thickness);
     }
 
     public function getThickness(): DripstoneThickness
@@ -59,12 +50,11 @@ class PointedDripstone extends Transparent
     {
         if (!Main::canChangeBlockStates($this, $player)) return false;
         $this->position->getWorld()->setBlock($this->position, $this->setThickness(match ($this->getThickness()) {
-            DripstoneThickness::TIP() => DripstoneThickness::MERGE(),
-            DripstoneThickness::MERGE() => DripstoneThickness::FRUSTUM(),
-            DripstoneThickness::FRUSTUM() => DripstoneThickness::MIDDLE(),
-            DripstoneThickness::MIDDLE() => DripstoneThickness::BASE(),
-            DripstoneThickness::BASE() => DripstoneThickness::TIP(),
-            default => throw new AssumptionFailedError("Unknown thickness: " . $this->getThickness()->name())
+            DripstoneThickness::TIP => DripstoneThickness::MERGE,
+            DripstoneThickness::MERGE => DripstoneThickness::FRUSTUM,
+            DripstoneThickness::FRUSTUM => DripstoneThickness::MIDDLE,
+            DripstoneThickness::MIDDLE => DripstoneThickness::BASE,
+            DripstoneThickness::BASE => DripstoneThickness::TIP,
         }));
         return true;
     }

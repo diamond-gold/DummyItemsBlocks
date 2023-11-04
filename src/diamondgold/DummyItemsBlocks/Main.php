@@ -694,7 +694,7 @@ final class Main extends PluginBase
             );
             StringToItemParser::getInstance()->register($id, fn() => clone $item);
             // For some reason it disappears from client-side creative inventory if I do registerBlocks() first... why Mojang...?
-            foreach (PotionType::getAll() as $type) {
+            foreach (PotionType::cases() as $type) {
                 $potion = (clone $item)->setType($type);
                 CreativeInventory::getInstance()->add($potion);
                 $name = explode(':', $id);
@@ -715,11 +715,11 @@ final class Main extends PluginBase
                 fn(GoatHorn $item) => GoatHornTypeIdMap::getInstance()->toId($item->getType())
             );
             StringToItemParser::getInstance()->register($id, fn() => clone $item);
-            foreach (GoatHornType::getAll() as $type) {
+            foreach (GoatHornType::cases() as $type) {
                 $horn = (clone $item)->setType($type);
                 CreativeInventory::getInstance()->add($horn);
                 $name = explode(':', $id);
-                StringToItemParser::getInstance()->register($name[0] . ':' . $type->name() . '_' . $name[1], fn() => clone $horn);
+                StringToItemParser::getInstance()->register($name[0] . ':' . $type->name . '_' . $name[1], fn() => clone $horn);
             }
         }
         // im too lazy to list all the items with compound tag data, easier to just reload ;P

@@ -21,7 +21,7 @@ final class FireworkStar extends Item
     {
         parent::__construct($identifier, $name);
 
-        $this->explosion = new FireworkRocketExplosion(FireworkRocketType::SMALL_BALL(), [DyeColor::BLACK()], [], false, false);
+        $this->explosion = new FireworkRocketExplosion(FireworkRocketType::SMALL_BALL, [DyeColor::BLACK()], [], false, false);
     }
 
     public function getExplosion(): FireworkRocketExplosion

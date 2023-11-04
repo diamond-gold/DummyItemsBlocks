@@ -3,7 +3,6 @@
 namespace diamondgold\DummyItemsBlocks\block;
 
 use diamondgold\DummyItemsBlocks\block\enum\FacingDirection;
-use diamondgold\DummyItemsBlocks\block\hack\HackStringProperty;
 use diamondgold\DummyItemsBlocks\block\trait\FacingDirectionTrait;
 use diamondgold\DummyItemsBlocks\block\trait\PoweredTrait;
 use pocketmine\block\BlockIdentifier;
@@ -22,8 +21,7 @@ class Observer extends Opaque
 
     public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
     {
-        $this->facingDirection = FacingDirection::DOWN();
-        $this->facingDirectionHack = new HackStringProperty(FacingDirection::getAll());
+        $this->facingDirection = FacingDirection::DOWN;
         parent::__construct($idInfo, $name, $typeInfo);
     }
 

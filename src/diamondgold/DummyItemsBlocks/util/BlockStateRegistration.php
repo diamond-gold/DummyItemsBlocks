@@ -591,19 +591,19 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): Observer => (clone $block)
                 ->setFacingDirection(match ($reader->readString(BlockStateNames::MC_FACING_DIRECTION)) {
-                    BlockStateStringValues::MC_FACING_DIRECTION_DOWN => FacingDirection::DOWN(),
-                    BlockStateStringValues::MC_FACING_DIRECTION_UP => FacingDirection::UP(),
-                    BlockStateStringValues::MC_FACING_DIRECTION_NORTH => FacingDirection::NORTH(),
-                    BlockStateStringValues::MC_FACING_DIRECTION_SOUTH => FacingDirection::SOUTH(),
-                    BlockStateStringValues::MC_FACING_DIRECTION_WEST => FacingDirection::WEST(),
-                    BlockStateStringValues::MC_FACING_DIRECTION_EAST => FacingDirection::EAST(),
+                    BlockStateStringValues::MC_FACING_DIRECTION_DOWN => FacingDirection::DOWN,
+                    BlockStateStringValues::MC_FACING_DIRECTION_UP => FacingDirection::UP,
+                    BlockStateStringValues::MC_FACING_DIRECTION_NORTH => FacingDirection::NORTH,
+                    BlockStateStringValues::MC_FACING_DIRECTION_SOUTH => FacingDirection::SOUTH,
+                    BlockStateStringValues::MC_FACING_DIRECTION_WEST => FacingDirection::WEST,
+                    BlockStateStringValues::MC_FACING_DIRECTION_EAST => FacingDirection::EAST,
                     default => throw $reader->badValueException(BlockStateNames::MC_FACING_DIRECTION, $reader->readString(BlockStateNames::MC_FACING_DIRECTION)),
                 })
                 ->setPowered($reader->readBool(BlockStateNames::POWERED_BIT))
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(Observer $block) => Writer::create($id)
-                ->writeString(BlockStateNames::MC_FACING_DIRECTION, $block->getFacingDirection()->name())
+                ->writeString(BlockStateNames::MC_FACING_DIRECTION, strtolower($block->getFacingDirection()->name))
                 ->writeBool(BlockStateNames::POWERED_BIT, $block->isPowered())
         );
     }
@@ -669,18 +669,18 @@ final class BlockStateRegistration
             fn(Reader $reader): PointedDripstone => (clone $block)
                 ->setHanging($reader->readBool(BlockStateNames::HANGING))
                 ->setThickness(match ($reader->readString(BlockStateNames::DRIPSTONE_THICKNESS)) {
-                    BlockStateStringValues::DRIPSTONE_THICKNESS_BASE => DripstoneThickness::BASE(),
-                    BlockStateStringValues::DRIPSTONE_THICKNESS_FRUSTUM => DripstoneThickness::FRUSTUM(),
-                    BlockStateStringValues::DRIPSTONE_THICKNESS_MERGE => DripstoneThickness::MERGE(),
-                    BlockStateStringValues::DRIPSTONE_THICKNESS_MIDDLE => DripstoneThickness::MIDDLE(),
-                    BlockStateStringValues::DRIPSTONE_THICKNESS_TIP => DripstoneThickness::TIP(),
+                    BlockStateStringValues::DRIPSTONE_THICKNESS_BASE => DripstoneThickness::BASE,
+                    BlockStateStringValues::DRIPSTONE_THICKNESS_FRUSTUM => DripstoneThickness::FRUSTUM,
+                    BlockStateStringValues::DRIPSTONE_THICKNESS_MERGE => DripstoneThickness::MERGE,
+                    BlockStateStringValues::DRIPSTONE_THICKNESS_MIDDLE => DripstoneThickness::MIDDLE,
+                    BlockStateStringValues::DRIPSTONE_THICKNESS_TIP => DripstoneThickness::TIP,
                     default => throw $reader->badValueException(BlockStateNames::DRIPSTONE_THICKNESS, $reader->readString(BlockStateNames::DRIPSTONE_THICKNESS))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(PointedDripstone $block) => Writer::create($id)
                 ->writeBool(BlockStateNames::HANGING, $block->isHanging())
-                ->writeString(BlockStateNames::DRIPSTONE_THICKNESS, $block->getThickness()->name())
+                ->writeString(BlockStateNames::DRIPSTONE_THICKNESS, strtolower($block->getThickness()->name))
         );
     }
 
@@ -777,15 +777,15 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): SeaGrass => (clone $block)
                 ->setType(match ($reader->readString(BlockStateNames::SEA_GRASS_TYPE)) {
-                    BlockStateStringValues::SEA_GRASS_TYPE_DEFAULT => SeaGrassType::DEFAULT(),
-                    BlockStateStringValues::SEA_GRASS_TYPE_DOUBLE_TOP => SeaGrassType::DOUBLE_TOP(),
-                    BlockStateStringValues::SEA_GRASS_TYPE_DOUBLE_BOT => SeaGrassType::DOUBLE_BOT(),
+                    BlockStateStringValues::SEA_GRASS_TYPE_DEFAULT => SeaGrassType::DEFAULT,
+                    BlockStateStringValues::SEA_GRASS_TYPE_DOUBLE_TOP => SeaGrassType::DOUBLE_TOP,
+                    BlockStateStringValues::SEA_GRASS_TYPE_DOUBLE_BOT => SeaGrassType::DOUBLE_BOT,
                     default => throw $reader->badValueException(BlockStateNames::SEA_GRASS_TYPE, $reader->readString(BlockStateNames::SEA_GRASS_TYPE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(SeaGrass $block) => Writer::create($id)
-                ->writeString(BlockStateNames::SEA_GRASS_TYPE, $block->getType()->name())
+                ->writeString(BlockStateNames::SEA_GRASS_TYPE, strtolower($block->getType()->name))
         );
     }
 
@@ -798,15 +798,15 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): SnifferEgg => (clone $block)
                 ->setCrackedState(match ($reader->readString(BlockStateNames::CRACKED_STATE)) {
-                    BlockStateStringValues::CRACKED_STATE_NO_CRACKS => CrackedState::NO_CRACKS(),
-                    BlockStateStringValues::CRACKED_STATE_CRACKED => CrackedState::CRACKED(),
-                    BlockStateStringValues::CRACKED_STATE_MAX_CRACKED => CrackedState::MAX_CRACKED(),
+                    BlockStateStringValues::CRACKED_STATE_NO_CRACKS => CrackedState::NO_CRACKS,
+                    BlockStateStringValues::CRACKED_STATE_CRACKED => CrackedState::CRACKED,
+                    BlockStateStringValues::CRACKED_STATE_MAX_CRACKED => CrackedState::MAX_CRACKED,
                     default => throw $reader->badValueException(BlockStateNames::CRACKED_STATE, $reader->readString(BlockStateNames::CRACKED_STATE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(SnifferEgg $block) => Writer::create($id)
-                ->writeString(BlockStateNames::CRACKED_STATE, $block->getCrackedState()->name())
+                ->writeString(BlockStateNames::CRACKED_STATE, strtolower($block->getCrackedState()->name))
         );
     }
 
@@ -820,18 +820,18 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): StructureBlock => (clone $block)
                 ->setType(match ($reader->readString(BlockStateNames::STRUCTURE_BLOCK_TYPE)) {
-                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_SAVE => StructureBlockType::SAVE(),
-                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_LOAD => StructureBlockType::LOAD(),
-                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_CORNER => StructureBlockType::CORNER(),
-                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_DATA => StructureBlockType::DATA(),
-                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_EXPORT => StructureBlockType::EXPORT(),
-                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_INVALID => StructureBlockType::INVALID(),
+                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_SAVE => StructureBlockType::SAVE,
+                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_LOAD => StructureBlockType::LOAD,
+                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_CORNER => StructureBlockType::CORNER,
+                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_DATA => StructureBlockType::DATA,
+                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_EXPORT => StructureBlockType::EXPORT,
+                    BlockStateStringValues::STRUCTURE_BLOCK_TYPE_INVALID => StructureBlockType::INVALID,
                     default => throw $reader->badValueException(BlockStateNames::STRUCTURE_BLOCK_TYPE, $reader->readString(BlockStateNames::STRUCTURE_BLOCK_TYPE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(StructureBlock $block) => Writer::create($id)
-                ->writeString(BlockStateNames::STRUCTURE_BLOCK_TYPE, $block->getType()->name())
+                ->writeString(BlockStateNames::STRUCTURE_BLOCK_TYPE, strtolower($block->getType()->name))
         );
     }
 
@@ -845,14 +845,14 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): StructureVoid => (clone $block)
                 ->setType(match ($reader->readString(BlockStateNames::STRUCTURE_VOID_TYPE)) {
-                    BlockStateStringValues::STRUCTURE_VOID_TYPE_VOID => StructureVoidType::VOID(),
-                    BlockStateStringValues::STRUCTURE_VOID_TYPE_AIR => StructureVoidType::AIR(),
+                    BlockStateStringValues::STRUCTURE_VOID_TYPE_VOID => StructureVoidType::VOID,
+                    BlockStateStringValues::STRUCTURE_VOID_TYPE_AIR => StructureVoidType::AIR,
                     default => throw $reader->badValueException(BlockStateNames::STRUCTURE_VOID_TYPE, $reader->readString(BlockStateNames::STRUCTURE_VOID_TYPE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(StructureVoid $block) => Writer::create($id)
-                ->writeString(BlockStateNames::STRUCTURE_VOID_TYPE, $block->getType()->name())
+                ->writeString(BlockStateNames::STRUCTURE_VOID_TYPE, strtolower($block->getType()->name))
         );
     }
 
@@ -905,23 +905,23 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getDeserializer()->map($id,
             fn(Reader $reader): TurtleEgg => (clone $block)
                 ->setEggCount(match ($reader->readString(BlockStateNames::TURTLE_EGG_COUNT)) {
-                    BlockStateStringValues::TURTLE_EGG_COUNT_ONE_EGG => TurtleEggCount::ONE_EGG(),
-                    BlockStateStringValues::TURTLE_EGG_COUNT_TWO_EGG => TurtleEggCount::TWO_EGG(),
-                    BlockStateStringValues::TURTLE_EGG_COUNT_THREE_EGG => TurtleEggCount::THREE_EGG(),
-                    BlockStateStringValues::TURTLE_EGG_COUNT_FOUR_EGG => TurtleEggCount::FOUR_EGG(),
+                    BlockStateStringValues::TURTLE_EGG_COUNT_ONE_EGG => TurtleEggCount::ONE_EGG,
+                    BlockStateStringValues::TURTLE_EGG_COUNT_TWO_EGG => TurtleEggCount::TWO_EGG,
+                    BlockStateStringValues::TURTLE_EGG_COUNT_THREE_EGG => TurtleEggCount::THREE_EGG,
+                    BlockStateStringValues::TURTLE_EGG_COUNT_FOUR_EGG => TurtleEggCount::FOUR_EGG,
                     default => throw $reader->badValueException(BlockStateNames::TURTLE_EGG_COUNT, $reader->readString(BlockStateNames::TURTLE_EGG_COUNT))
                 })
                 ->setCrackedState(match ($reader->readString(BlockStateNames::CRACKED_STATE)) {
-                    BlockStateStringValues::CRACKED_STATE_NO_CRACKS => CrackedState::NO_CRACKS(),
-                    BlockStateStringValues::CRACKED_STATE_CRACKED => CrackedState::CRACKED(),
-                    BlockStateStringValues::CRACKED_STATE_MAX_CRACKED => CrackedState::MAX_CRACKED(),
+                    BlockStateStringValues::CRACKED_STATE_NO_CRACKS => CrackedState::NO_CRACKS,
+                    BlockStateStringValues::CRACKED_STATE_CRACKED => CrackedState::CRACKED,
+                    BlockStateStringValues::CRACKED_STATE_MAX_CRACKED => CrackedState::MAX_CRACKED,
                     default => throw $reader->badValueException(BlockStateNames::CRACKED_STATE, $reader->readString(BlockStateNames::CRACKED_STATE))
                 })
         );
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(TurtleEgg $block) => Writer::create($id)
-                ->writeString(BlockStateNames::TURTLE_EGG_COUNT, $block->getEggCount()->name())
-                ->writeString(BlockStateNames::CRACKED_STATE, $block->getCrackedState()->name())
+                ->writeString(BlockStateNames::TURTLE_EGG_COUNT, strtolower($block->getEggCount()->name))
+                ->writeString(BlockStateNames::CRACKED_STATE, strtolower($block->getCrackedState()->name))
         );
     }
 }

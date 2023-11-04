@@ -11,7 +11,7 @@ final class GoatHorn extends Item
 
     public function __construct(ItemIdentifier $identifier, string $name)
     {
-        $this->type = GoatHornType::PONDER();
+        $this->type = GoatHornType::PONDER;
         parent::__construct($identifier, $name);
     }
 
