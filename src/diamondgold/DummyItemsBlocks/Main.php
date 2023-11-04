@@ -364,16 +364,6 @@ final class Main extends PluginBase
     public static function registerSpecialBlocks(array &$blocks): void
     {
         foreach ([
-                     BlockTypeNames::SMALL_AMETHYST_BUD,
-                     BlockTypeNames::MEDIUM_AMETHYST_BUD,
-                     BlockTypeNames::LARGE_AMETHYST_BUD,
-                     BlockTypeNames::AMETHYST_CLUSTER,
-                 ] as $id) {
-            if (Utils::removeIfPresent($id, $blocks)) {
-                BlockStateRegistration::AmethystAnyFacing($id);
-            }
-        }
-        foreach ([
                      BlockTypeNames::PISTON_ARM_COLLISION,
                      BlockTypeNames::STICKY_PISTON_ARM_COLLISION,
                  ] as $id) {
@@ -483,10 +473,6 @@ final class Main extends PluginBase
         if (Utils::removeIfPresent(BlockTypeNames::CHERRY_SAPLING, $blocks)) {
             BlockStateRegistration::CherrySapling();
         }
-        // chiseled_bookshelf BOOKS_STORED 0-63 DIRECTION
-        if (Utils::removeIfPresent(BlockTypeNames::CHISELED_BOOKSHELF, $blocks)) {
-            BlockStateRegistration::ChiseledBookshelf();
-        }
         // chain_command_block command_block repeating_command_block CONDITIONAL_BIT T/F FACING_DIRECTION
         foreach ([BlockTypeNames::COMMAND_BLOCK, BlockTypeNames::REPEATING_COMMAND_BLOCK, BlockTypeNames::CHAIN_COMMAND_BLOCK] as $id) {
             if (Utils::removeIfPresent($id, $blocks)) {
@@ -533,14 +519,6 @@ final class Main extends PluginBase
                 BlockStateRegistration::Piston($id);
             }
         }
-        // pitcher_crop GROWTH 0-4 UPPER_BLOCK_BIT T/F
-        if (Utils::removeIfPresent(BlockTypeNames::PITCHER_CROP, $blocks)) {
-            BlockStateRegistration::PitcherCrop();
-        }
-        // pitcher_plant UPPER_BLOCK_BIT T/F
-        if (Utils::removeIfPresent(BlockTypeNames::PITCHER_PLANT, $blocks)) {
-            BlockStateRegistration::PitcherPlant();
-        }
         // pointed_dripstone DRIPSTONE_THICKNESS string HANGING T/F
         if (Utils::removeIfPresent(BlockTypeNames::POINTED_DRIPSTONE, $blocks)) {
             BlockStateRegistration::PointedDripstone();
@@ -586,10 +564,6 @@ final class Main extends PluginBase
             if (Utils::removeIfPresent($id, $blocks)) {
                 BlockStateRegistration::SuspiciousFallable($id);
             }
-        }
-        // torchflower_crop GROWTH 0-2
-        if (Utils::removeIfPresent(BlockTypeNames::TORCHFLOWER_CROP, $blocks)) {
-            BlockStateRegistration::TorchflowerCrop();
         }
         // turtle_egg TURTLE_EGG_COUNT string CRACKED_STATE string
         if (Utils::removeIfPresent(BlockTypeNames::TURTLE_EGG, $blocks)) {
@@ -657,19 +631,16 @@ final class Main extends PluginBase
             DummyItems::BAMBOO_SIGN()
         );
 
-        foreach ([
-                     BlockTypeNames::POWDER_SNOW => ItemTypeNames::POWDER_SNOW_BUCKET, // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5964
-                     BlockTypeNames::PITCHER_CROP => ItemTypeNames::PITCHER_POD,
-                     BlockTypeNames::TORCHFLOWER_CROP => ItemTypeNames::TORCHFLOWER_SEEDS,
-                 ] as $blockId => $itemId) {
-            if (in_array($itemId, $items, true) && in_array($blockId, $blocks, true)) { //should not remove if either one is not present (register as normal item)
-                Utils::removeIfPresent($itemId, $items);
-                $block = StringToItemParser::getInstance()->parse($blockId)?->getBlock();
-                if ($block === null) {
-                    throw new AssumptionFailedError("Block $blockId not registered in StringToItemParser");
-                }
-                self::registerSimpleItem($itemId, new ItemPlacedAsBlock(new ItemIdentifier(ItemTypeIds::newId()), Utils::generateNameFromId($itemId), $block), [$itemId]);
+        // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/5964
+        $blockId = BlockTypeNames::POWDER_SNOW;
+        $itemId = ItemTypeNames::POWDER_SNOW_BUCKET;
+        if (in_array($itemId, $items, true) && in_array($blockId, $blocks, true)) { //should not remove if either one is not present (register as normal item)
+            Utils::removeIfPresent($itemId, $items);
+            $block = StringToItemParser::getInstance()->parse($blockId)?->getBlock();
+            if ($block === null) {
+                throw new AssumptionFailedError("Block $blockId not registered in StringToItemParser");
             }
+            self::registerSimpleItem($itemId, new ItemPlacedAsBlock(new ItemIdentifier(ItemTypeIds::newId()), Utils::generateNameFromId($itemId), $block), [$itemId]);
         }
     }
 

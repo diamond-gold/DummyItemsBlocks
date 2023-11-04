@@ -2,7 +2,6 @@
 blocks:
 - minecraft:acacia_hanging_sign
 - minecraft:allow
-- minecraft:amethyst_cluster
 - minecraft:azalea
 - minecraft:bamboo_block
 - minecraft:bamboo_button
@@ -27,21 +26,18 @@ blocks:
 - minecraft:birch_hanging_sign
 - minecraft:border_block
 - minecraft:bubble_column
-- minecraft:budding_amethyst
 - minecraft:calibrated_sculk_sensor
 - minecraft:camera
 - minecraft:campfire
 - minecraft:chain_command_block
 - minecraft:cherry_hanging_sign
 - minecraft:cherry_sapling
-- minecraft:chiseled_bookshelf
 - minecraft:command_block
 - minecraft:composter
 - minecraft:conduit
 - minecraft:crimson_fungus
 - minecraft:crimson_hanging_sign
 - minecraft:crimson_nylium
-- minecraft:crimson_roots
 - minecraft:dark_oak_hanging_sign
 - minecraft:decorated_pot
 - minecraft:deny
@@ -58,11 +54,9 @@ blocks:
 - minecraft:jigsaw
 - minecraft:jungle_hanging_sign
 - minecraft:kelp
-- minecraft:large_amethyst_bud
 - minecraft:lodestone
 - minecraft:mangrove_hanging_sign
 - minecraft:mangrove_propagule
-- minecraft:medium_amethyst_bud
 - minecraft:moss_block
 - minecraft:moss_carpet
 - minecraft:moving_block
@@ -71,8 +65,6 @@ blocks:
 - minecraft:observer
 - minecraft:piston
 - minecraft:piston_arm_collision
-- minecraft:pitcher_crop
-- minecraft:pitcher_plant
 - minecraft:pointed_dripstone
 - minecraft:powder_snow
 - minecraft:repeating_command_block
@@ -83,7 +75,6 @@ blocks:
 - minecraft:sculk_shrieker
 - minecraft:sculk_vein
 - minecraft:seagrass
-- minecraft:small_amethyst_bud
 - minecraft:sniffer_egg
 - minecraft:soul_campfire
 - minecraft:spruce_hanging_sign
@@ -95,14 +86,11 @@ blocks:
 - minecraft:suspicious_gravel
 - minecraft:suspicious_sand
 - minecraft:target
-- minecraft:torchflower
-- minecraft:torchflower_crop
 - minecraft:turtle_egg
 - minecraft:unknown
 - minecraft:warped_fungus
 - minecraft:warped_hanging_sign
 - minecraft:warped_nylium
-- minecraft:warped_roots
 items:
 - minecraft:acacia_chest_boat
 - minecraft:acacia_hanging_sign
@@ -228,7 +216,6 @@ items:
 - minecraft:piglin_brute_spawn_egg
 - minecraft:piglin_spawn_egg
 - minecraft:pillager_spawn_egg
-- minecraft:pitcher_pod
 - minecraft:plenty_pottery_sherd
 - minecraft:polar_bear_spawn_egg
 - minecraft:powder_snow_bucket
@@ -274,7 +261,6 @@ items:
 - minecraft:tadpole_spawn_egg
 - minecraft:tide_armor_trim_smithing_template
 - minecraft:tnt_minecart
-- minecraft:torchflower_seeds
 - minecraft:trader_llama_spawn_egg
 - minecraft:trident
 - minecraft:tropical_fish_bucket

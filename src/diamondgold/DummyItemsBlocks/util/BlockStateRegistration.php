@@ -7,12 +7,10 @@ use diamondgold\DummyItemsBlocks\block\BubbleColumn;
 use diamondgold\DummyItemsBlocks\block\CalibratedSculkSensor;
 use diamondgold\DummyItemsBlocks\block\Campfire;
 use diamondgold\DummyItemsBlocks\block\CherrySapling;
-use diamondgold\DummyItemsBlocks\block\ChiseledBookshelf;
 use diamondgold\DummyItemsBlocks\block\CommandBlock;
 use diamondgold\DummyItemsBlocks\block\Composter;
 use diamondgold\DummyItemsBlocks\block\DecoratedPot;
 use diamondgold\DummyItemsBlocks\block\Dispenser;
-use diamondgold\DummyItemsBlocks\block\enum\BlockFace;
 use diamondgold\DummyItemsBlocks\block\enum\CrackedState;
 use diamondgold\DummyItemsBlocks\block\enum\DripstoneThickness;
 use diamondgold\DummyItemsBlocks\block\enum\FacingDirection;
@@ -27,8 +25,6 @@ use diamondgold\DummyItemsBlocks\block\Kelp;
 use diamondgold\DummyItemsBlocks\block\MangrovePropagule;
 use diamondgold\DummyItemsBlocks\block\Observer;
 use diamondgold\DummyItemsBlocks\block\Piston;
-use diamondgold\DummyItemsBlocks\block\PitcherCrop;
-use diamondgold\DummyItemsBlocks\block\PitcherPlant;
 use diamondgold\DummyItemsBlocks\block\PointedDripstone;
 use diamondgold\DummyItemsBlocks\block\RespawnAnchor;
 use diamondgold\DummyItemsBlocks\block\Scaffolding;
@@ -40,9 +36,7 @@ use diamondgold\DummyItemsBlocks\block\SnifferEgg;
 use diamondgold\DummyItemsBlocks\block\StructureBlock;
 use diamondgold\DummyItemsBlocks\block\StructureVoid;
 use diamondgold\DummyItemsBlocks\block\SuspiciousFallable;
-use diamondgold\DummyItemsBlocks\block\TorchflowerCrop;
 use diamondgold\DummyItemsBlocks\block\TurtleEgg;
-use diamondgold\DummyItemsBlocks\block\type\AmethystAnyFacing;
 use diamondgold\DummyItemsBlocks\block\type\AnyFacingTransparent;
 use diamondgold\DummyItemsBlocks\block\type\MultiFaceDirection;
 use diamondgold\DummyItemsBlocks\tile\DummyTile;
@@ -295,30 +289,6 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete in 5.7
-    public static function AmethystAnyFacing(string $id): void
-    {
-        $block = new AmethystAnyFacing(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id]);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): AmethystAnyFacing => (clone $block)
-                ->setBlockFace(match ($reader->readString(BlockStateNames::MC_BLOCK_FACE)) {
-                    BlockStateStringValues::MC_BLOCK_FACE_DOWN => BlockFace::DOWN(),
-                    BlockStateStringValues::MC_BLOCK_FACE_UP => BlockFace::UP(),
-                    BlockStateStringValues::MC_BLOCK_FACE_NORTH => BlockFace::NORTH(),
-                    BlockStateStringValues::MC_BLOCK_FACE_SOUTH => BlockFace::SOUTH(),
-                    BlockStateStringValues::MC_BLOCK_FACE_WEST => BlockFace::WEST(),
-                    BlockStateStringValues::MC_BLOCK_FACE_EAST => BlockFace::EAST(),
-                    default => throw $reader->badValueException(BlockStateNames::MC_BLOCK_FACE, $reader->readString(BlockStateNames::MC_BLOCK_FACE))
-                })
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(AmethystAnyFacing $block) => Writer::create($id)
-                ->writeString(BlockStateNames::MC_BLOCK_FACE, $block->getBlockFace()->name())
-        );
-    }
-
     public static function BeeHive(string $id): void
     {
         $block = new BeeHive(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
@@ -401,25 +371,6 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(CherrySapling $block) => Writer::create($id)
                 ->writeBool(BlockStateNames::AGE_BIT, $block->isAgeBit())
-        );
-    }
-
-    // obsolete in 5.7
-    public static function ChiseledBookshelf(): void
-    {
-        $id = BlockTypeNames::CHISELED_BOOKSHELF;
-        $block = new ChiseledBookshelf(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id]);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): ChiseledBookshelf => (clone $block)
-                ->setFacing($reader->readLegacyHorizontalFacing())
-                ->setBooks($reader->readBoundedInt(BlockStateNames::BOOKS_STORED, 0, 63))
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(ChiseledBookshelf $block) => Writer::create($id)
-                ->writeLegacyHorizontalFacing($block->getFacing())
-                ->writeInt(BlockStateNames::BOOKS_STORED, $block->getBooks())
         );
     }
 
@@ -620,42 +571,6 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(Piston $block) => Writer::create($id)
                 ->writeFacingDirection($block->getFacing())
-        );
-    }
-
-    // obsolete in 5.7
-    public static function PitcherCrop(): void
-    {
-        $id = BlockTypeNames::PITCHER_CROP;
-        $block = new PitcherCrop(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id], false);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): PitcherCrop => (clone $block)
-                ->setAge($reader->readBoundedInt(BlockStateNames::GROWTH, 0, 4))
-                ->setUpper($reader->readBool(BlockStateNames::UPPER_BLOCK_BIT))
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(PitcherCrop $block) => Writer::create($id)
-                ->writeInt(BlockStateNames::GROWTH, $block->getAge())
-                ->writeBool(BlockStateNames::UPPER_BLOCK_BIT, $block->isUpper())
-        );
-    }
-
-    // obsolete in 5.7
-    public static function PitcherPlant(): void
-    {
-        $id = BlockTypeNames::PITCHER_PLANT;
-        $block = new PitcherPlant(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id]);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): PitcherPlant => (clone $block)
-                ->setUpper($reader->readBool(BlockStateNames::UPPER_BLOCK_BIT))
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(PitcherPlant $block) => Writer::create($id)
-                ->writeBool(BlockStateNames::UPPER_BLOCK_BIT, $block->isUpper())
         );
     }
 
@@ -876,23 +791,6 @@ final class BlockStateRegistration
             fn(SuspiciousFallable $block) => Writer::create($id)
                 ->writeInt(BlockStateNames::BRUSHED_PROGRESS, $block->getBrushedProgress())
                 ->writeBool(BlockStateNames::HANGING, $block->isHanging())
-        );
-    }
-
-    // obsolete in 5.7
-    public static function TorchflowerCrop(): void
-    {
-        $id = BlockTypeNames::TORCHFLOWER_CROP;
-        $block = new TorchflowerCrop(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
-        self::register($block, [$id], false);
-
-        GlobalBlockStateHandlers::getDeserializer()->map($id,
-            fn(Reader $reader): TorchflowerCrop => (clone $block)
-                ->setAge($reader->readBoundedInt(BlockStateNames::GROWTH, 0, 2))
-        );
-        GlobalBlockStateHandlers::getSerializer()->map($block,
-            fn(TorchflowerCrop $block) => Writer::create($id)
-                ->writeInt(BlockStateNames::GROWTH, $block->getAge())
         );
     }
 
