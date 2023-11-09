@@ -38,7 +38,7 @@ class SculkSensor extends Transparent
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        $w->boundedInt(2, 0, 2, $this->phase);
+        $w->boundedIntAuto(0, 2, $this->phase);
     }
 
     public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool

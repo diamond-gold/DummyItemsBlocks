@@ -19,7 +19,7 @@ class Scaffolding extends Transparent
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        $w->boundedInt(3, 0, 7, $this->stability);
+        $w->boundedIntAuto(0, 7, $this->stability);
         $w->bool($this->stabilityCheck);
     }
 

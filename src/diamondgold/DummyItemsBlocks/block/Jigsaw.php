@@ -25,7 +25,7 @@ class Jigsaw extends Opaque
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $this->describeAnyFacingBlockOnlyState($w);
-        $w->boundedInt(2, 0, 3, $this->rotation);
+        $w->boundedIntAuto(0, 3, $this->rotation);
     }
 
     public function getRotation(): int

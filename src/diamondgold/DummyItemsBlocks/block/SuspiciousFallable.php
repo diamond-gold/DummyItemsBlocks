@@ -32,7 +32,7 @@ class SuspiciousFallable extends Opaque
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $this->describeHangingState($w);
-        $w->boundedInt(2, 0, 3, $this->brushedProgress);
+        $w->boundedIntAuto(0, 3, $this->brushedProgress);
     }
 
     public function getBrushedProgress(): int

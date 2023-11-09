@@ -21,7 +21,7 @@ trait MultiFaceDirectionTrait
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        $w->boundedInt(6, 0, 63, $this->multiFaceDirection);
+        $w->boundedIntAuto(0, 63, $this->multiFaceDirection);
     }
 
     public function getMultiFaceDirection(): int

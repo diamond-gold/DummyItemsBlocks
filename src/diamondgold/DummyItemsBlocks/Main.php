@@ -669,7 +669,7 @@ final class Main extends PluginBase
                 $potion = (clone $item)->setType($type);
                 CreativeInventory::getInstance()->add($potion);
                 $name = explode(':', $id);
-                StringToItemParser::getInstance()->register($name[0] . ':' . $type->name() . '_' . $name[1], fn() => clone $potion);
+                StringToItemParser::getInstance()->register($name[0] . ':' . $type->name . '_' . $name[1], fn() => clone $potion);
             }
         }
         // bare minimum code needed for non-functional item adapted from https://github.com/pmmp/PocketMine-MP/pull/5232

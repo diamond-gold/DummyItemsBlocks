@@ -24,7 +24,7 @@ class MangrovePropagule extends Transparent
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $this->describeHangingState($w);
-        $w->boundedInt(3, 0, 4, $this->stage);
+        $w->boundedIntAuto(0, 4, $this->stage);
     }
 
     public function getStage(): int

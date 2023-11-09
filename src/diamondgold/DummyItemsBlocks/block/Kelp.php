@@ -15,7 +15,7 @@ class Kelp extends Transparent
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        $w->boundedInt(5, 0, 25, $this->age);
+        $w->boundedIntAuto(0, 25, $this->age);
     }
 
     public function getAge(): int

@@ -16,7 +16,7 @@ class RespawnAnchor extends Opaque
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        $w->boundedInt(3, 0, 4, $this->charges);
+        $w->boundedIntAuto(0, 4, $this->charges);
     }
 
     public function getCharges(): int

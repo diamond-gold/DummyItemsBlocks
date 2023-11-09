@@ -31,7 +31,7 @@ class BeeHive extends Opaque
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $this->describeFacingState($w);
-        $w->boundedInt(3, 0, 5, $this->honeyLevel);
+        $w->boundedIntAuto(0, 5, $this->honeyLevel);
     }
 
     public function getHoneyLevel(): int

@@ -19,7 +19,7 @@ class Composter extends Opaque
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
-        $w->boundedInt(4, 0, 8, $this->fillLevel);
+        $w->boundedIntAuto(0, 8, $this->fillLevel);
     }
 
     public function getFillLevel(): int
