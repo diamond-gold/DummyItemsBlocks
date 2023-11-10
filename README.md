@@ -52,9 +52,7 @@ Customizable using the Main::setCanChangeStatesClosure() method
 |       Block        | Sneak-right-click  |     Right-click     |
 |:------------------:|:------------------:|:-------------------:|
 |  (Soul) Campfire   |    Toggle fire     |     Place item      |
-| Chiseled Bookshelf |         -          |  Toggle book slots  |
 |   Decorated Pot    |         -          | Place sherd pattern |
-|    Pitcher Crop    | Toggle upper state |   Increase growth   |
 |  (Sticky) Piston   |         -          |   Toggle extended   |
 |     Turtle Egg     |  Increase cracks   | Increase egg Count  |
 
@@ -66,6 +64,5 @@ Referenced from various PRs on the PocketMine-MP repo
 Contains code adapted from
 - #5232 Goat Horn
 - #5455 Firework Star/Rocket
-- #5827 Chiseled Bookshelf
 
 Icon created using textures from: https://modrinth.com/resourcepack/vanillaxbr
