@@ -7,7 +7,7 @@ use pocketmine\data\runtime\RuntimeDataDescriber;
 
 trait CrackedStateTrait
 {
-    protected CrackedState $crackedState;
+    protected CrackedState $crackedState = CrackedState::NO_CRACKS;
 
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void

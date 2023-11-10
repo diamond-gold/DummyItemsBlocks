@@ -26,13 +26,7 @@ class StructureBlock extends Opaque
 {
     use DummyTileTrait;
 
-    protected StructureBlockType $type;
-
-    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
-    {
-        $this->type = StructureBlockType::DATA;
-        parent::__construct($idInfo, $name, $typeInfo);
-    }
+    protected StructureBlockType $type = StructureBlockType::DATA;
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {

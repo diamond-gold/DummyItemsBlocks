@@ -19,12 +19,6 @@ class Observer extends Opaque
         PoweredTrait::describeBlockOnlyState as describePoweredState;
     }
 
-    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
-    {
-        $this->facingDirection = FacingDirection::DOWN;
-        parent::__construct($idInfo, $name, $typeInfo);
-    }
-
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {
         $this->describeFacingDirectionState($w);

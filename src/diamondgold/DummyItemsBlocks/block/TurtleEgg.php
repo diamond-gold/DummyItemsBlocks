@@ -22,14 +22,7 @@ class TurtleEgg extends Transparent
     }
     use NoneSupportTrait;
 
-    protected TurtleEggCount $eggCount;
-
-    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
-    {
-        $this->crackedState = CrackedState::NO_CRACKS;
-        $this->eggCount = TurtleEggCount::ONE_EGG;
-        parent::__construct($idInfo, $name, $typeInfo);
-    }
+    protected TurtleEggCount $eggCount = TurtleEggCount::ONE_EGG;
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {

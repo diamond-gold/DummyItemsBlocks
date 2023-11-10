@@ -18,12 +18,6 @@ class SnifferEgg extends Transparent
     use CrackedStateTrait;
     use NoneSupportTrait;
 
-    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
-    {
-        $this->crackedState = CrackedState::NO_CRACKS;
-        parent::__construct($idInfo, $name, $typeInfo);
-    }
-
     public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
     {
         if (!Main::canChangeBlockStates($this, $player)) return false;

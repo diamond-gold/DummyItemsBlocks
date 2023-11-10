@@ -21,13 +21,7 @@ class PointedDripstone extends Transparent
     }
     use NoneSupportTrait;
 
-    protected DripstoneThickness $thickness;
-
-    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
-    {
-        $this->thickness = DripstoneThickness::TIP;
-        parent::__construct($idInfo, $name, $typeInfo);
-    }
+    protected DripstoneThickness $thickness = DripstoneThickness::TIP;
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {

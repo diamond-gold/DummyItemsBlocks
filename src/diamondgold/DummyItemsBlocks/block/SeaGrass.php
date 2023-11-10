@@ -17,13 +17,7 @@ class SeaGrass extends Transparent
 {
     use NoneSupportTrait;
 
-    protected SeaGrassType $type;
-
-    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
-    {
-        $this->type = SeaGrassType::DEFAULT;
-        parent::__construct($idInfo, $name, $typeInfo);
-    }
+    protected SeaGrassType $type = SeaGrassType::DEFAULT;
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {

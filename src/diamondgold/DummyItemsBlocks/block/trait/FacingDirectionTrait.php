@@ -14,7 +14,7 @@ use pocketmine\world\BlockTransaction;
 
 trait FacingDirectionTrait
 {
-    protected FacingDirection $facingDirection;
+    protected FacingDirection $facingDirection = FacingDirection::DOWN;
 
     protected function describeBlockOnlyState(RuntimeDataDescriber $w): void
     {

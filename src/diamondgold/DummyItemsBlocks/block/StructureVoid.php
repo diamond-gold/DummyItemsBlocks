@@ -17,13 +17,7 @@ class StructureVoid extends Flowable
 {
     use NoneSupportTrait;
 
-    protected StructureVoidType $type;
-
-    public function __construct(BlockIdentifier $idInfo, string $name, BlockTypeInfo $typeInfo)
-    {
-        $this->type = StructureVoidType::VOID;
-        parent::__construct($idInfo, $name, $typeInfo);
-    }
+    protected StructureVoidType $type = StructureVoidType::VOID;
 
     public function describeBlockItemState(RuntimeDataDescriber $w): void
     {
