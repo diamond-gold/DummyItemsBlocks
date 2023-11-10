@@ -8,6 +8,6 @@ trait NoneSupportTrait
 {
     public function getSupportType(int $facing): SupportType
     {
-        return SupportType::NONE();
+        return SupportType::NONE;
     }
 }
