@@ -7,8 +7,6 @@ use diamondgold\DummyItemsBlocks\Main;
 use diamondgold\DummyItemsBlocks\tile\DummyTileTrait;
 use diamondgold\DummyItemsBlocks\tile\TileNames;
 use diamondgold\DummyItemsBlocks\tile\TileNbtTagNames;
-use pocketmine\block\BlockIdentifier;
-use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Opaque;
 use pocketmine\block\tile\Tile;
 use pocketmine\data\runtime\RuntimeDataDescriber;

@@ -2,11 +2,8 @@
 
 namespace diamondgold\DummyItemsBlocks\block;
 
-use diamondgold\DummyItemsBlocks\block\enum\FacingDirection;
 use diamondgold\DummyItemsBlocks\block\trait\FacingDirectionTrait;
 use diamondgold\DummyItemsBlocks\block\trait\PoweredTrait;
-use pocketmine\block\BlockIdentifier;
-use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Opaque;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 

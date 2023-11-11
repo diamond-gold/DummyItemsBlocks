@@ -3,8 +3,6 @@
 namespace diamondgold\DummyItemsBlocks\block;
 
 use pocketmine\block\Block;
-use pocketmine\block\BlockIdentifier;
-use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Transparent;
 use pocketmine\block\utils\BellAttachmentType;
 use pocketmine\block\utils\HorizontalFacingTrait;

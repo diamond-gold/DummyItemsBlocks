@@ -6,8 +6,6 @@ use diamondgold\DummyItemsBlocks\block\enum\DripstoneThickness;
 use diamondgold\DummyItemsBlocks\block\trait\HangingTrait;
 use diamondgold\DummyItemsBlocks\block\trait\NoneSupportTrait;
 use diamondgold\DummyItemsBlocks\Main;
-use pocketmine\block\BlockIdentifier;
-use pocketmine\block\BlockTypeInfo;
 use pocketmine\block\Transparent;
 use pocketmine\data\runtime\RuntimeDataDescriber;
 use pocketmine\item\Item;
