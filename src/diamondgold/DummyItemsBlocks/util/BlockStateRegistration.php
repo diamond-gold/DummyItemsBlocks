@@ -750,7 +750,7 @@ final class BlockStateRegistration
         );
     }
 
-    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/6045
+    // obsolete when merged https://github.com/pmmp/PocketMine-MP/pull/6156
     public static function StructureVoid(): void
     {
         $id = BlockTypeNames::STRUCTURE_VOID;
