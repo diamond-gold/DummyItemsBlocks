@@ -25,8 +25,6 @@ final class TileNbtTagNames
     // Campfire
     public const Items = "Item%d"; // sprintf
     public const ItemTime = "ItemTime%d"; // sprintf
-    // ChiseledBookshelf
-    public const LastInteractedSlot = "LastInteractedSlot";
     // Conduit
     public const Active = "Active";
     public const Target = "Target";

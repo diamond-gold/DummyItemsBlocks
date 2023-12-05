@@ -812,7 +812,6 @@ final class Main extends PluginBase
             TileNames::BRUSHABLE_BLOCK => [BlockTypeNames::SUSPICIOUS_GRAVEL, BlockTypeNames::SUSPICIOUS_SAND],
             TileNames::CALIBRATED_SCULK_SENSOR => [BlockTypeNames::CALIBRATED_SCULK_SENSOR],
             TileNames::CAMPFIRE => [BlockTypeNames::CAMPFIRE, BlockTypeNames::SOUL_CAMPFIRE],
-            TileNames::CHISELED_BOOKSHELF => [BlockTypeNames::CHISELED_BOOKSHELF],
             TileNames::CONDUIT => [BlockTypeNames::CONDUIT], // generic block registration, tile not important, activation is client-side, Active Byte 0 Target Long -1 isMovable 1
             TileNames::COMMAND_BLOCK => [BlockTypeNames::COMMAND_BLOCK, BlockTypeNames::CHAIN_COMMAND_BLOCK, BlockTypeNames::REPEATING_COMMAND_BLOCK],
             TileNames::DECORATED_POT => [BlockTypeNames::DECORATED_POT],

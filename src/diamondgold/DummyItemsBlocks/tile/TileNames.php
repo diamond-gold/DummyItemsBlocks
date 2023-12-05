@@ -8,7 +8,6 @@ final class TileNames
     public const BRUSHABLE_BLOCK = "BrushableBlock";
     public const CALIBRATED_SCULK_SENSOR = "CalibratedSculkSensor";
     public const CAMPFIRE = "Campfire";
-    public const CHISELED_BOOKSHELF = "ChiseledBookshelf";
     public const CONDUIT = "Conduit";
     public const COMMAND_BLOCK = "CommandBlock";
     public const DECORATED_POT = "DecoratedPot";
