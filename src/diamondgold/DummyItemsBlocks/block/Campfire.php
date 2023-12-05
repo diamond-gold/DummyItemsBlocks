@@ -140,4 +140,9 @@ class Campfire extends Transparent
     {
         return [AxisAlignedBB::one()->trim(Facing::UP, 0.5)];
     }
+
+    public function getLightLevel(): int
+    {
+        return $this->extinguished ? 0 : 15;
+    }
 }

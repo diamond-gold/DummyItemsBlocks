@@ -52,4 +52,9 @@ class SculkCatalyst extends Opaque
         $tag->setString(Tile::TAG_ID, TileNames::SCULK_CATALYST);
         $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
     }
+
+    public function getLightLevel(): int
+    {
+        return 6;
+    }
 }

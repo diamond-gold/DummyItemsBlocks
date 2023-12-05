@@ -57,4 +57,9 @@ class SculkSensor extends Transparent
         );
         $this->setTagIfNotExist($tag, TileNbtTagNames::isMovable, new ByteTag(1));
     }
+
+    public function getLightLevel(): int
+    {
+        return 1;
+    }
 }
