@@ -6,5 +6,7 @@ projects:
   DummyItemsBlocks:
     path: ""
     icon: icon.gif
-    lint: false
+    lint:
+      phpstan: false
+      syntaxError: false
 ...
