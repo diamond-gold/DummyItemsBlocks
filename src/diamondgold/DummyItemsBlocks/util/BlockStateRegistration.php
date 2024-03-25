@@ -9,15 +9,22 @@ use diamondgold\DummyItemsBlocks\block\Campfire;
 use diamondgold\DummyItemsBlocks\block\CherrySapling;
 use diamondgold\DummyItemsBlocks\block\CommandBlock;
 use diamondgold\DummyItemsBlocks\block\Composter;
+use diamondgold\DummyItemsBlocks\block\CopperBulb;
+use diamondgold\DummyItemsBlocks\block\CopperBulbExposed;
+use diamondgold\DummyItemsBlocks\block\CopperBulbOxidized;
+use diamondgold\DummyItemsBlocks\block\CopperBulbWeathered;
+use diamondgold\DummyItemsBlocks\block\Crafter;
 use diamondgold\DummyItemsBlocks\block\DecoratedPot;
 use diamondgold\DummyItemsBlocks\block\Dispenser;
 use diamondgold\DummyItemsBlocks\block\enum\CrackedState;
 use diamondgold\DummyItemsBlocks\block\enum\DripstoneThickness;
 use diamondgold\DummyItemsBlocks\block\enum\FacingDirection;
+use diamondgold\DummyItemsBlocks\block\enum\Orientation;
 use diamondgold\DummyItemsBlocks\block\enum\SeaGrassType;
 use diamondgold\DummyItemsBlocks\block\enum\StructureBlockType;
 use diamondgold\DummyItemsBlocks\block\enum\StructureVoidType;
 use diamondgold\DummyItemsBlocks\block\enum\TurtleEggCount;
+use diamondgold\DummyItemsBlocks\block\enum\VaultState;
 use diamondgold\DummyItemsBlocks\block\Grindstone;
 use diamondgold\DummyItemsBlocks\block\HangingSign;
 use diamondgold\DummyItemsBlocks\block\Jigsaw;
@@ -36,9 +43,11 @@ use diamondgold\DummyItemsBlocks\block\SnifferEgg;
 use diamondgold\DummyItemsBlocks\block\StructureBlock;
 use diamondgold\DummyItemsBlocks\block\StructureVoid;
 use diamondgold\DummyItemsBlocks\block\SuspiciousFallable;
+use diamondgold\DummyItemsBlocks\block\TrialSpawner;
 use diamondgold\DummyItemsBlocks\block\TurtleEgg;
 use diamondgold\DummyItemsBlocks\block\type\AnyFacingTransparent;
 use diamondgold\DummyItemsBlocks\block\type\MultiFaceDirection;
+use diamondgold\DummyItemsBlocks\block\Vault;
 use diamondgold\DummyItemsBlocks\tile\DummyTile;
 use pocketmine\block\Block;
 use pocketmine\block\BlockBreakInfo;
@@ -73,6 +82,7 @@ use pocketmine\data\bedrock\block\convert\BlockStateSerializerHelper;
 use pocketmine\data\bedrock\block\convert\BlockStateWriter as Writer;
 use pocketmine\inventory\CreativeInventory;
 use pocketmine\item\StringToItemParser;
+use pocketmine\utils\AssumptionFailedError;
 use pocketmine\world\format\io\GlobalBlockStateHandlers;
 
 /* @internal */
@@ -405,6 +415,65 @@ final class BlockStateRegistration
         GlobalBlockStateHandlers::getSerializer()->map($block,
             fn(Composter $block) => Writer::create($id)
                 ->writeInt(BlockStateNames::COMPOSTER_FILL_LEVEL, $block->getFillLevel())
+        );
+    }
+
+    public static function CopperBulb(string $id): void
+    {
+        $class = match ($id) {
+            BlockTypeNames::COPPER_BULB, BlockTypeNames::WAXED_COPPER_BULB => CopperBulb::class,
+            BlockTypeNames::EXPOSED_COPPER_BULB, BlockTypeNames::WAXED_EXPOSED_COPPER_BULB => CopperBulbExposed::class,
+            BlockTypeNames::OXIDIZED_COPPER_BULB, BlockTypeNames::WAXED_OXIDIZED_COPPER_BULB => CopperBulbOxidized::class,
+            BlockTypeNames::WEATHERED_COPPER_BULB, BlockTypeNames::WAXED_WEATHERED_COPPER_BULB => CopperBulbWeathered::class,
+            default => throw new AssumptionFailedError("Unmapped copper bulb id: $id")
+        };
+        /** @var CopperBulb $block */
+        $block = new $class(new BlockIdentifier(BlockTypeIds::newId()), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
+        self::register($block, [$id]);
+
+        GlobalBlockStateHandlers::getDeserializer()->map($id,
+            fn(Reader $reader): CopperBulb => (clone $block)
+                ->setLit($reader->readBool(BlockStateNames::LIT))
+                ->setPowered($reader->readBool(BlockStateNames::POWERED_BIT))
+        );
+        GlobalBlockStateHandlers::getSerializer()->map($block,
+            fn(CopperBulb $block) => Writer::create($id)
+                ->writeBool(BlockStateNames::LIT, $block->isLit())
+                ->writeBool(BlockStateNames::POWERED_BIT, $block->isPowered())
+        );
+    }
+
+    public static function Crafter(): void
+    {
+        $id = BlockTypeNames::CRAFTER;
+        $block = new Crafter(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
+        self::register($block, [$id]);
+
+        GlobalBlockStateHandlers::getDeserializer()->map($id,
+            fn(Reader $reader): Crafter => (clone $block)
+                ->setCrafting($reader->readBool(BlockStateNames::CRAFTING))
+                ->setOrientation(match ($reader->readString(BlockStateNames::ORIENTATION)) {
+                    BlockStateStringValues::ORIENTATION_DOWN_EAST => Orientation::DOWN_EAST,
+                    BlockStateStringValues::ORIENTATION_DOWN_NORTH => Orientation::DOWN_NORTH,
+                    BlockStateStringValues::ORIENTATION_DOWN_SOUTH => Orientation::DOWN_SOUTH,
+                    BlockStateStringValues::ORIENTATION_DOWN_WEST => Orientation::DOWN_WEST,
+                    BlockStateStringValues::ORIENTATION_EAST_UP => Orientation::EAST_UP,
+                    BlockStateStringValues::ORIENTATION_NORTH_UP => Orientation::NORTH_UP,
+                    BlockStateStringValues::ORIENTATION_SOUTH_UP => Orientation::SOUTH_UP,
+                    BlockStateStringValues::ORIENTATION_UP_EAST => Orientation::UP_EAST,
+                    BlockStateStringValues::ORIENTATION_UP_NORTH => Orientation::UP_NORTH,
+                    BlockStateStringValues::ORIENTATION_UP_SOUTH => Orientation::UP_SOUTH,
+                    BlockStateStringValues::ORIENTATION_UP_WEST => Orientation::UP_WEST,
+                    BlockStateStringValues::ORIENTATION_WEST_UP => Orientation::WEST_UP,
+                    default => throw $reader->badValueException(BlockStateNames::ORIENTATION, $reader->readString(BlockStateNames::ORIENTATION))
+                })
+                ->setTriggered($reader->readBool(BlockStateNames::TRIGGERED_BIT))
+        );
+        GlobalBlockStateHandlers::getSerializer()->map($block,
+            fn(Crafter $block) => Writer::create($id)
+                ->writeBool(BlockStateNames::CRAFTING, $block->isCrafting())
+                ->writeString(BlockStateNames::ORIENTATION, strtolower($block->getOrientation()->name))
+                ->writeBool(BlockStateNames::TRIGGERED_BIT, $block->isTriggered())
         );
     }
 
@@ -794,6 +863,22 @@ final class BlockStateRegistration
         );
     }
 
+    public static function TrialSpawner(): void
+    {
+        $id = BlockTypeNames::TRIAL_SPAWNER;
+        $block = new TrialSpawner(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::instant()));
+        self::register($block, [$id]);
+
+        GlobalBlockStateHandlers::getDeserializer()->map($id,
+            fn(Reader $reader): TrialSpawner => (clone $block)
+                ->setState($reader->readInt(BlockStateNames::TRIAL_SPAWNER_STATE))
+        );
+        GlobalBlockStateHandlers::getSerializer()->map($block,
+            fn(TrialSpawner $block) => Writer::create($id)
+                ->writeInt(BlockStateNames::TRIAL_SPAWNER_STATE, $block->getState())
+        );
+    }
+
     public static function TurtleEgg(): void
     {
         $id = BlockTypeNames::TURTLE_EGG;
@@ -820,6 +905,30 @@ final class BlockStateRegistration
             fn(TurtleEgg $block) => Writer::create($id)
                 ->writeString(BlockStateNames::TURTLE_EGG_COUNT, strtolower($block->getEggCount()->name))
                 ->writeString(BlockStateNames::CRACKED_STATE, strtolower($block->getCrackedState()->name))
+        );
+    }
+
+    public static function Vault(): void
+    {
+        $id = BlockTypeNames::VAULT;
+        $block = new Vault(new BlockIdentifier(BlockTypeIds::newId(), DummyTile::class), Utils::generateNameFromId($id), new BlockTypeInfo(BlockBreakInfo::indestructible()));
+        self::register($block, [$id]);
+
+        GlobalBlockStateHandlers::getDeserializer()->map($id,
+            fn(Reader $reader): Vault => (clone $block)
+                ->setFacing($reader->readCardinalHorizontalFacing())
+                ->setState(match ($reader->readString(BlockStateNames::VAULT_STATE)) {
+                    BlockStateStringValues::VAULT_STATE_INACTIVE => VaultState::INACTIVE,
+                    BlockStateStringValues::VAULT_STATE_ACTIVE => VaultState::ACTIVE,
+                    BlockStateStringValues::VAULT_STATE_UNLOCKING => VaultState::UNLOCKING,
+                    BlockStateStringValues::VAULT_STATE_EJECTING => VaultState::EJECTING,
+                    default => throw $reader->badValueException(BlockStateNames::VAULT_STATE, $reader->readString(BlockStateNames::VAULT_STATE))
+                })
+        );
+        GlobalBlockStateHandlers::getSerializer()->map($block,
+            fn(Vault $block) => Writer::create($id)
+                ->writeCardinalHorizontalFacing($block->getFacing())
+                ->writeString(BlockStateNames::VAULT_STATE, strtolower($block->getState()->name))
         );
     }
 }

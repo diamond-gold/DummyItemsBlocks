@@ -62,6 +62,7 @@ use Throwable;
 
 final class Main extends PluginBase
 {
+    /** @var Closure(Block, ?Player): bool */
     private static Closure $canChangeBlockStatesClosure;
 
     protected function onLoad(): void
@@ -86,6 +87,9 @@ final class Main extends PluginBase
         });
     }
 
+    /**
+     * @param Closure(Block, ?Player): bool $closure
+     */
     public static function setCanChangeStatesClosure(Closure $closure): void
     {
         \pocketmine\utils\Utils::validateCallableSignature(fn(Block $block, ?Player $player): bool => true, $closure);
@@ -569,6 +573,89 @@ final class Main extends PluginBase
         if (Utils::removeIfPresent(BlockTypeNames::TURTLE_EGG, $blocks)) {
             BlockStateRegistration::TurtleEgg();
         }
+        // copper bulb LIT POWERED_BIT
+        foreach ([
+                     BlockTypeNames::COPPER_BULB,
+                     BlockTypeNames::EXPOSED_COPPER_BULB,
+                     BlockTypeNames::OXIDIZED_COPPER_BULB,
+                     BlockTypeNames::WEATHERED_COPPER_BULB,
+                     BlockTypeNames::WAXED_COPPER_BULB,
+                     BlockTypeNames::WAXED_EXPOSED_COPPER_BULB,
+                     BlockTypeNames::WAXED_OXIDIZED_COPPER_BULB,
+                     BlockTypeNames::WAXED_WEATHERED_COPPER_BULB
+                 ] as $id) {
+            if (Utils::removeIfPresent($id, $blocks)) {
+                BlockStateRegistration::CopperBulb($id);
+            }
+        }
+        foreach ([
+                     BlockTypeNames::COPPER_DOOR,
+                     BlockTypeNames::EXPOSED_COPPER_DOOR,
+                     BlockTypeNames::OXIDIZED_COPPER_DOOR,
+                     BlockTypeNames::WEATHERED_COPPER_DOOR,
+                     BlockTypeNames::WAXED_COPPER_DOOR,
+                     BlockTypeNames::WAXED_EXPOSED_COPPER_DOOR,
+                     BlockTypeNames::WAXED_OXIDIZED_COPPER_DOOR,
+                     BlockTypeNames::WAXED_WEATHERED_COPPER_DOOR
+                 ] as $id) {
+            if (Utils::removeIfPresent($id, $blocks)) {
+                BlockStateRegistration::door($id);
+            }
+        }
+        foreach ([
+                     BlockTypeNames::COPPER_TRAPDOOR,
+                     BlockTypeNames::EXPOSED_COPPER_TRAPDOOR,
+                     BlockTypeNames::OXIDIZED_COPPER_TRAPDOOR,
+                     BlockTypeNames::WEATHERED_COPPER_TRAPDOOR,
+                     BlockTypeNames::WAXED_COPPER_TRAPDOOR,
+                     BlockTypeNames::WAXED_EXPOSED_COPPER_TRAPDOOR,
+                     BlockTypeNames::WAXED_OXIDIZED_COPPER_TRAPDOOR,
+                     BlockTypeNames::WAXED_WEATHERED_COPPER_TRAPDOOR
+                 ] as $id) {
+            if (Utils::removeIfPresent($id, $blocks)) {
+                BlockStateRegistration::trapdoor($id);
+            }
+        }
+        // crafter CRAFTING TRIGGERED_BIT ORIENTATION
+        if (Utils::removeIfPresent(BlockTypeNames::CRAFTER, $blocks)) {
+            BlockStateRegistration::Crafter();
+        }
+        // can't register separately, either both or none
+        foreach ([
+                     BlockTypeNames::TUFF_SLAB => BlockTypeNames::TUFF_DOUBLE_SLAB,
+                     BlockTypeNames::TUFF_BRICK_SLAB => BlockTypeNames::TUFF_BRICK_DOUBLE_SLAB,
+                     BlockTypeNames::POLISHED_TUFF_SLAB => BlockTypeNames::POLISHED_TUFF_DOUBLE_SLAB,
+                 ] as $singleId => $doubleId) {
+            if (Utils::removeIfPresent($singleId, $blocks) && Utils::removeIfPresent($doubleId, $blocks)) {
+                BlockStateRegistration::slab($singleId, $doubleId);
+            }
+        }
+        foreach ([
+                     BlockTypeNames::TUFF_STAIRS,
+                     BlockTypeNames::TUFF_BRICK_STAIRS,
+                     BlockTypeNames::POLISHED_TUFF_STAIRS
+                 ] as $id) {
+            if (Utils::removeIfPresent($id, $blocks)) {
+                BlockStateRegistration::stairs($id);
+            }
+        }
+        foreach ([
+                     BlockTypeNames::TUFF_WALL,
+                     BlockTypeNames::TUFF_BRICK_WALL,
+                     BlockTypeNames::POLISHED_TUFF_WALL
+                 ] as $id) {
+            if (Utils::removeIfPresent($id, $blocks)) {
+                BlockStateRegistration::wall($id);
+            }
+        }
+        // trial spawner trial_spawner_state int 1
+        if (Utils::removeIfPresent(BlockTypeNames::TRIAL_SPAWNER, $blocks)) {
+            BlockStateRegistration::TrialSpawner();
+        }
+        // vault cardinal_direction vault_state
+        if (Utils::removeIfPresent(BlockTypeNames::VAULT, $blocks)) {
+            BlockStateRegistration::Vault();
+        }
     }
 
     /**
@@ -814,6 +901,7 @@ final class Main extends PluginBase
             TileNames::CAMPFIRE => [BlockTypeNames::CAMPFIRE, BlockTypeNames::SOUL_CAMPFIRE],
             TileNames::CONDUIT => [BlockTypeNames::CONDUIT], // generic block registration, tile not important, activation is client-side, Active Byte 0 Target Long -1 isMovable 1
             TileNames::COMMAND_BLOCK => [BlockTypeNames::COMMAND_BLOCK, BlockTypeNames::CHAIN_COMMAND_BLOCK, BlockTypeNames::REPEATING_COMMAND_BLOCK],
+            TileNames::CRAFTER => [BlockTypeNames::CRAFTER],
             TileNames::DECORATED_POT => [BlockTypeNames::DECORATED_POT],
             TileNames::DISPENSER => [BlockTypeNames::DISPENSER],
             TileNames::DROPPER => [BlockTypeNames::DROPPER],
@@ -844,6 +932,8 @@ final class Main extends PluginBase
             TileNames::SCULK_SHRIEKER => [BlockTypeNames::SCULK_SHRIEKER],
             TileNames::SCULK_CATALYST => [BlockTypeNames::SCULK_CATALYST],
             TileNames::STRUCTURE_BLOCK => [BlockTypeNames::STRUCTURE_BLOCK],
+            TileNames::TRIAL_SPAWNER => [BlockTypeNames::TRIAL_SPAWNER],
+            TileNames::VAULT => [BlockTypeNames::VAULT]
         ];
         $registeredTiles = ReflectionHelper::TileFactoryRegisteredTileIds();
         foreach ($tiles as $name => $blockNames) {

@@ -5,6 +5,7 @@ namespace diamondgold\DummyItemsBlocks\block;
 use diamondgold\DummyItemsBlocks\block\trait\HangingTrait;
 use diamondgold\DummyItemsBlocks\Main;
 use diamondgold\DummyItemsBlocks\tile\DummyTileTrait;
+use diamondgold\DummyItemsBlocks\tile\LootTables;
 use diamondgold\DummyItemsBlocks\tile\TileNames;
 use diamondgold\DummyItemsBlocks\tile\TileNbtTagNames;
 use diamondgold\DummyItemsBlocks\util\Utils;
@@ -57,7 +58,7 @@ class SuspiciousFallable extends Opaque
     protected function writeDefaultTileData(CompoundTag $tag): void
     {
         $tag->setString(Tile::TAG_ID, TileNames::BRUSHABLE_BLOCK);
-        $this->setTagIfNotExist($tag, TileNbtTagNames::LootTable, new StringTag("loot_tables/entities/empty_brushable_block.json"));
+        $this->setTagIfNotExist($tag, TileNbtTagNames::LootTable, new StringTag(LootTables::EMPTY_BRUSHABLE_BLOCK->value));
         $this->setTagIfNotExist($tag, TileNbtTagNames::LootTableSeed, new IntTag(0));
         $this->setTagIfNotExist($tag, TileNbtTagNames::brush_count, new IntTag(0));
         $this->setTagIfNotExist($tag, TileNbtTagNames::brush_direction, new ByteTag(6));

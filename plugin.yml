@@ -2,7 +2,7 @@ name: DummyItemsBlocks
 main: diamondgold\DummyItemsBlocks\Main
 description: Registers (non-functional) items and blocks
 version: 1.1.0-dev
-api: 5.8.0
+api: 5.13.0
 load: STARTUP
 author: diamond-gold (ace)
 website: https://github.com/diamond-gold/DummyItemsBlocks

@@ -43,8 +43,14 @@ final class TileNbtTagNames
     public const auto = "auto";
     public const conditionMet = "conditionMet";
     public const powered = "powered";
+    // Crafter
+    public const crafting_ticks_remaining = "crafting_ticks_remaining";
+    public const triggered = "triggered";
+    public const disabled_slots = "disabled_slots";
     // DecoratedPot
     public const sherds = "sherds";
+    public const animation = "animation";
+    public const item = "item";
     // HangingSign
     public const HideGlowOutline = "HideGlowOutline";
     public const TextOwner = "TextOwner";
@@ -78,4 +84,32 @@ final class TileNbtTagNames
     public const yStructureSize = "yStructureSize";
     public const zStructureOffset = "zStructureOffset";
     public const zStructureSize = "zStructureSize";
+    // TrialSpawner
+    public const cooldown_ends_at = "cooldown_ends_at";
+    public const current_mobs = "current_mobs";
+    public const loot_tables_to_eject = "loot_tables_to_eject";
+    public const weight = "weight";
+    public const next_mob_spawns_at = "next_mob_spawns_at";
+    public const registered_players = "registered_players";
+    public const required_player_range = "required_player_range";
+    public const simultaneous_mobs = "simultaneous_mobs";
+    public const simultaneous_mobs_added_per_player = "simultaneous_mobs_added_per_player";
+    public const target_cooldown_length = "target_cooldown_length";
+    public const spawn_range = "spawn_range";
+    public const ticks_between_spawn = "ticks_between_spawn";
+    public const total_mobs = "total_mobs";
+    public const total_mobs_added_per_player = "total_mobs_added_per_player";
+    public const spawn_data = "spawn_data";
+    public const spawn_data_TypeId = "TypeId";
+    // Vault
+    public const config = "config";
+    public const loot_table = "loot_table";
+    public const override_loot_table_to_display = "override_loot_table_to_display";
+    public const activation_range = "activation_range";
+    public const deactivation_range = "deactivation_range";
+    public const key_item = "key_item";
+    public const rewarded_players = "rewarded_players";
+    public const state_updating_resumes_at = "state_updating_resumes_at";
+    public const items_to_eject = "items_to_eject";
+    public const total_ejections_needed = "total_ejections_needed";
 }

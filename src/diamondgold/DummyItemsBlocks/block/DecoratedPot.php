@@ -11,6 +11,8 @@ use diamondgold\DummyItemsBlocks\tile\TileNbtTagNames;
 use pocketmine\block\tile\Tile;
 use pocketmine\block\Transparent;
 use pocketmine\block\utils\FacesOppositePlacingPlayerTrait;
+use pocketmine\data\bedrock\item\SavedItemData;
+use pocketmine\data\bedrock\item\SavedItemStackData;
 use pocketmine\item\Item;
 use pocketmine\item\StringToItemParser;
 use pocketmine\math\Facing;
@@ -30,6 +32,19 @@ class DecoratedPot extends Transparent
     public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null, array &$returnedItems = []): bool
     {
         if (!Main::canChangeBlockStates($this, $player)) return false;
+        if ($player?->isSneaking()) {
+            $tile = $this->position->getWorld()->getTile($this->position);
+            if ($tile instanceof DummyTile) {
+                $nbt = $tile->saveNBT();
+                $animation = $nbt->getByte(TileNbtTagNames::animation, 0) !== 0;
+                $animation = !$animation;
+                $nbt->setByte(TileNbtTagNames::animation, (int)$animation);
+                $tile->readSaveData($nbt);
+                $this->position->getWorld()->setBlock($this->position, $this);
+                $player->sendTip("Animation: " . ($animation ? "true" : "false"));
+                return true;
+            }
+        }
         if ($face === Facing::UP || $face === Facing::DOWN) return false;
         $alias = (StringToItemParser::getInstance()->lookupAliases($item)[0] ?? "");
         if (str_contains($alias, "_pottery_sherd")) {
@@ -77,5 +92,12 @@ class DecoratedPot extends Transparent
                 new StringTag(""),
             ]
         ));
+        $this->setTagIfNotExist($tag, TileNbtTagNames::animation, new ByteTag(0));
+        $this->setTagIfNotExist($tag, TileNbtTagNames::item, CompoundTag::create()
+            ->setByte(SavedItemStackData::TAG_COUNT, 0)
+            ->setShort(SavedItemData::TAG_DAMAGE, 0)
+            ->setString(SavedItemData::TAG_NAME, "")
+            ->setByte(SavedItemStackData::TAG_WAS_PICKED_UP, 0)
+        );
     }
 }

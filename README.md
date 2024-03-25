@@ -28,6 +28,8 @@ Feeling generous? Buy me some [snacks](https://ko-fi.com/diamondgold)! (❤´艸
 [![Feature Requests](https://img.shields.io/github/issues-raw/diamond-gold/DummyItemsBlocks/Feature%20Request?label=Feature%20Requests&logo=github&style=for-the-badge)](https://github.com/diamond-gold/DummyItemsBlocks/issues)
 [![Bug Reports](https://img.shields.io/github/issues-raw/diamond-gold/DummyItemsBlocks/bug?label=Bug%20Reports&logo=github&style=for-the-badge)](https://github.com/diamond-gold/DummyItemsBlocks/issues)
 
+<img src="https://counter.seku.su/cmoe?name=dummyitemsblocks&theme=r34" alt="">
+
 # Known issue when another plugin that add vanilla items or blocks is installed
 `
 [Server thread/CRITICAL]: InvalidArgumentException: "Deserializer is already assigned for "minecraft:shield"" (EXCEPTION) in "pmsrc/src/data/bedrock/item/ItemDeserializer" at line 55
@@ -43,18 +45,18 @@ By default, the following is required to change block states by right-clicking
 - Player is in creative mode
 - Have `dummyitemsblocks.changestate` permission, default: op
 - Holding an arrow named `Change State` in either main hand or offhand
+  - Can be obtained by: ```/give player arrow 1 {display:{Name:"Change State"}}```
 
-Can be obtained by: ```/give player arrow 1 {display:{Name:"Change State"}}```
-
-Customizable using the Main::setCanChangeStatesClosure() method
+Customizable using the `Main::setCanChangeStatesClosure()` method
 
 ### Examples of block state changes by right-clicking:
-|       Block        | Sneak-right-click  |     Right-click     |
-|:------------------:|:------------------:|:-------------------:|
-|  (Soul) Campfire   |    Toggle fire     |     Place item      |
-|   Decorated Pot    |         -          | Place sherd pattern |
-|  (Sticky) Piston   |         -          |   Toggle extended   |
-|     Turtle Egg     |  Increase cracks   | Increase egg Count  |
+|      Block      | Sneak-right-click |     Right-click     |
+|:---------------:|:-----------------:|:-------------------:|
+| (Soul) Campfire |    Toggle fire    |     Place item      |
+|     Crafter     | Toggle triggered  |   Toggle crafting   |
+|  Decorated Pot  | Toggle animation  | Place sherd pattern |
+| (Sticky) Piston |         -         |   Toggle extended   |
+|   Turtle Egg    |  Increase cracks  | Increase egg Count  |
 
 There are many other blocks that can change state by right-clicking.
 
